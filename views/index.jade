@@ -1,25 +1,43 @@
 extends layout
 
 block content
-	#search
-		.v
-			label Any
-			input(ng-model="search.$")
-		.v
-			label name
-			input(ng-model="search.name")
-		.v
-			label roles
-			input(ng-model="search.roles")
-
 	div(ng-controller="hackerCtrl")
-		h1.
-			List of users
-		.hacker(ng-repeat="hacker in hackers | filter:search | orderBy:['-match']")
-			h2 {{hacker.name}}
-			.skills.vv(ng-repeat="role in hacker.roles")
-				h3.skill {{role}}
-				.skillsets.vv(ng-repeat="skill in hacker.skillsets[role]")
-					.skillset {{skill}}
-			.idea {{hacker.idea}}
-			.match {{hacker.match}}%
+		#search
+			.v
+				label Any
+				input(ng-model="search.$")
+			.v
+				label name
+				input(ng-model="search.name")
+			.v
+				.v
+					.v(ng-repeat="rl in rolelist")
+						label {{rl.name}}
+						input(type="checkbox" ng-model="rl.checked")
+					a(ng-click="setAllRole(true)") select all
+					a(ng-click="setAllRole(false)") deselect all
+			.v
+				.v
+					.v(ng-repeat="i in interestlist")
+						label {{i.name}}
+						input(type='checkbox' ng-model="i.checked")
+					a(ng-click="setAllInterest(true)") select all
+					a(ng-click="setAllInterest(false)") deselect all
+		div
+			h1.
+				List of users
+			#hackers(ng-if="hackers.length")
+				.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20")
+					h2 {{hacker.name}}
+					.skills.vv(ng-repeat="role in hacker.roles")
+						h3.skill.v 
+							| {{role}}&nbsp;
+							.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+					.interests.vv
+						h4.v
+							| Interested in: &nbsp;
+							.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
+					.idea {{hacker.idea}}
+					.match {{hacker.match}}%
+			#no_hackers(ng-if="!hackers.length")
+				| No hackers found!

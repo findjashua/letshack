@@ -2,6 +2,13 @@ body {
   background-color: #fff;
   font: 12px Helvetica, Arial, sans-serif;
 }
+a {
+  color: #00f;
+}
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 .hacker {
   border: 1px solid #ccc;
   margin-bottom: 5px;
@@ -14,6 +21,10 @@ body {
   right: 0;
   padding: 5px;
   font-size: 2em;
+}
+.hacker .idea {
+  padding: 5px;
+  background-color: #eee;
 }
 .v > * {
   display: inline-block;
