@@ -2,12 +2,13 @@
   "name": "application-name",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
   "dependencies": {
-    "express": "3.3.4",
+    "express": "latest",
     "jade": "*",
-	"coffee-script": "latest"
+  	"coffee-script": "latest",
+    "stylus": "latest"
+  },
+  "scripts": {
+    "start": "coffee app.coffee"
   }
 }

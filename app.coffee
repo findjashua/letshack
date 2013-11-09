@@ -2,11 +2,15 @@
 ###
 Module dependencies.
 ###
+require('coffee-script')
 express = require("express")
 routes = require("./routes")
 user = require("./routes/user")
 http = require("http")
 path = require("path")
+stylus = require('stylus')
+
+
 app = express()
 
 # all environments
@@ -18,6 +22,11 @@ app.use express.logger("dev")
 app.use express.bodyParser()
 app.use express.methodOverride()
 app.use app.router
+app.use stylus.middleware(
+	src: __dirname + '/views'
+	dest: __dirname + '/public'
+)
+
 app.use express.static(path.join(__dirname, "public"))
 
 # development only
@@ -25,5 +34,4 @@ app.use express.errorHandler()  if "development" is app.get("env")
 app.get "/", routes.index
 app.get "/users", user.list
 http.createServer(app).listen app.get("port"), ->
-  console.log "Express server listening on port " + app.get("port")
-
+	console.log "Express server listening on port " + app.get("port")

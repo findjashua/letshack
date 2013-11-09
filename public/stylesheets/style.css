@@ -1,8 +1,25 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #fff;
+  font: 12px Helvetica, Arial, sans-serif;
 }
-
-a {
-  color: #00B7FF;
+.hacker {
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  position: relative;
+  padding: 10px;
+}
+.hacker .match {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  font-size: 2em;
+}
+.v > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.v > *:last-child {
+  margin-right: 0;
 }

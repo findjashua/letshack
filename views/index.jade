@@ -1,5 +1,25 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}!
+	#search
+		.v
+			label Any
+			input(ng-model="search.$")
+		.v
+			label name
+			input(ng-model="search.name")
+		.v
+			label roles
+			input(ng-model="search.roles")
+
+	div(ng-controller="hackerCtrl")
+		h1.
+			List of users
+		.hacker(ng-repeat="hacker in hackers | filter:search | orderBy:['-match']")
+			h2 {{hacker.name}}
+			.skills.vv(ng-repeat="role in hacker.roles")
+				h3.skill {{role}}
+				.skillsets.vv(ng-repeat="skill in hacker.skillsets[role]")
+					.skillset {{skill}}
+			.idea {{hacker.idea}}
+			.match {{hacker.match}}%
