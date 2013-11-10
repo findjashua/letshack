@@ -164,6 +164,7 @@ app.get '/user', user.list
 app.post '/user', user.create
 app.get '/user/:authId', user.find
 app.put '/user', user.update
+app.get '/getEvents', user.getEvents
 ###
 app.delete '/user/:name', user.delete
 ###
