@@ -14,7 +14,7 @@ schema = new Schema
 	location : {type : String}
 	pictureUrl : {type : String}
 	roles : [String]
-	technologies : [String]
+	skills : [String]
 	industries : [String]
 	ideas : [String]
 	seeking_roles : [String]
@@ -66,7 +66,8 @@ exports.find = (req, res)->
 exports.update = (req, res)->
 	if not req.user?
 		res.redirect "/linkedin/login"
-	User.update {"_id" : "#{req.session.id}"}, req.body, (err, data)->
+	User.update {"auth.id" : "#{req.session.authId}"}, req.body, (err, data)->
+		console.log data
 		return res.send err if err?
 		return res.send data 
 

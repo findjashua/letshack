@@ -23,7 +23,7 @@ app.use express.methodOverride()
 app.use (req, res, next)->
   user_session = if req.session.name
     {
-      id: req.session.id
+      id: req.session.uid
       name: req.session.name
       pictureUrl: req.session.pictureUrl
       authId: req.session.authId
@@ -63,7 +63,7 @@ passport.deserializeUser (obj, done) ->
 
 setSession = (req, accessToken, data)->
   req.session.accessToken = accessToken
-  req.session.id = data._id
+  req.session.uid = data._id.str
   req.session.authId = data.auth.id
   req.session.name = data.name
   req.session.pictureUrl = data.pictureUrl
