@@ -59,7 +59,7 @@ app.controller 'loginCtrl', ['$scope', ($scope)->
 ]
 
 app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window, $http)->
-	
+
 	$scope.session_data = $window.session_data
 	$scope.isComplete = $window.session_data && $window.session_data.complete
 
@@ -71,11 +71,12 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		seeking_roles: {}
 		seeking_skills: {}
 
-	$scope.setOrderType = (order)->
-		$scope.orderType = "-score.#{order}"
-		$scope.orderToken = order
 
-	$scope.setOrderType('match_score')
+	$scope.updateOrderType = ->
+		$scope.orderType = "-scores.#{$scope.orderToken}"
+
+	$scope.orderToken = 'match_score'
+	$scope.updateOrderType()
 
 	ajax = (url, {method, data} , cb)->
 		info = 
@@ -177,7 +178,6 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 				if score = scores_map[u.auth.id.toString()]
 					u.scores = score
 					hackers.push u
-			console.log hackers
 			$scope.hackers = hackers
 
 	$scope.initHackers = (hackers)->

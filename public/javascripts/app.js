@@ -141,11 +141,11 @@
         seeking_roles: {},
         seeking_skills: {}
       };
-      $scope.setOrderType = function(order) {
-        $scope.orderType = "-score." + order;
-        return $scope.orderToken = order;
+      $scope.updateOrderType = function() {
+        return $scope.orderType = "-scores." + $scope.orderToken;
       };
-      $scope.setOrderType('match_score');
+      $scope.orderToken = 'match_score';
+      $scope.updateOrderType();
       ajax = function(url, _arg, cb) {
         var data, info, method;
 
@@ -330,7 +330,6 @@
               hackers.push(u);
             }
           }
-          console.log(hackers);
           return $scope.hackers = hackers;
         });
       };

@@ -61,9 +61,9 @@ block content
 				#search.1-box
 					.v
 						input.form_control(ng-model="search.idea",placeholder="Search by idea")
-					.v
+					#filter_row
 						.v
-							label Filter by Roles:
+							span.em Filter by Roles:
 							.select_container 
 								span &nbsp;{{displayChecked(rolelist)}}
 								ul.select_inner.list-unstyled
@@ -74,9 +74,8 @@ block content
 										a(ng-click="setAll('rolelist',true)") select all
 									li
 										a(ng-click="setAll('rolelist',false)") deselect all
-					.v
 						.v
-							label Filter by Skills:
+							span.em Filter by Skills:
 							.select_container
 								span &nbsp;{{displayChecked(skillslist)}}
 								ul.select_inner.list-unstyled
@@ -87,9 +86,8 @@ block content
 										a(ng-click="setAll('skillslist',true)") select all
 									li
 										a(ng-click="setAll('skillslist',false)") deselect all
-					.v
 						.v
-							label Filter by Industries:
+							span.em Filter by Industries:
 							.select_container
 								span &nbsp;{{displayChecked(interestlist)}}
 								ul.select_inner.list-unstyled
@@ -104,10 +102,10 @@ block content
 						.v
 							#sortby_selection.v
 								label Sort by: 
-								a.btn.btn-default(ng-click="setOrderType('you_want_them')", ng-class="{sel: orderToken=='you_want_them'}") Best candidates
-								a.btn.btn-default(ng-click="setOrderType('they_want_you')", ng-class="{sel: orderToken=='they_want_you'}") Most desired by
-								a.btn.btn-default(ng-click="setOrderType('match_score')", ng-class="{sel: orderToken=='match_score'}") Best match
-			
+								select(ng-model="orderToken", ng-change="updateOrderType()")
+									option(value="you_want_them") Best candidates
+									option(value="they_want_you") Most desired by
+									option(value="match_score") Best match
 				h1.
 					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
 			.col-xs-9(ng-show="isComplete")
