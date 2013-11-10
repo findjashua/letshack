@@ -17,6 +17,7 @@ a:hover {
   margin-bottom: 5px;
   position: relative;
   padding: 10px;
+  min-height: 100px;
 }
 .hacker .match {
   position: absolute;
@@ -43,4 +44,12 @@ a:hover {
   background-color: #ccc;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+.map-canvas {
+  display: block;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }

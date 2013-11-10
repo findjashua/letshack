@@ -1,6 +1,6 @@
 firebase_url = "https://letshack.firebaseio.com/"
 
-app = angular.module 'hackerApp', ['ui.router', 'firebase']
+app = angular.module 'hackerApp', ['ui.router','ui.event', 'ui.map','firebase']
 
 app.filter 'filterByRole', ->
 	(input, rolelist)->
@@ -83,6 +83,7 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 	]
 
 	$scope.reverseMatch= true
+	$scope.hackers = []
 
 	$scope.setAllInterest = (param)->
 		for i in $scope.interestlist
@@ -92,7 +93,25 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 		for r in $scope.rolelist
 			r.checked = param
 
-	$scope.hackers = [
+	$scope.initHackers = (hackers)->
+		$scope.hackers = hackers
+		for h in $scope.hackers
+			do (h)->
+				if h.location
+					ll = new google.maps.LatLng(h.location.lat, h.location.long)
+					h.mapOptions = 
+						center: ll
+						zoom: 10
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+						disableDefaultUI: true
+					
+					h.onMapIdle = ->
+						$scope.$apply ->
+							h.marker = new google.maps.Marker
+								map: h.googlemap,
+								position: ll
+
+	hackers = [
 		{
 			id: 1
 			name: 'Phil'
@@ -124,6 +143,9 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 			interests: ['google glasses']
 			looking_for: ['backend']
 			idea: "I want to build a medical startup as well"
+			location:
+				lat: 45
+				long: -73
 			match: 80
 		}
 		{
@@ -135,7 +157,14 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 			interests: ['advertising']
 			looking_for: ['frontend']
 			idea: "I want to build a linkedin bluetooth app"
+			location:
+				lat: 45
+				long: -73
 			match: 100
 		}
 	]
+	window.onGoogleReady = ->
+		$scope.$apply ->
+			$scope.initHackers hackers
+
 ]

@@ -48,6 +48,8 @@ block content
 								h4.v
 									| Interested in: &nbsp;
 									.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
+							div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
+							div(ng-if='hacker.location' ui-map-marker="hacker.marker")
 							.idea {{hacker.idea}}
 							.match {{hacker.match}}%
 					#no_hackers(ng-if="!hackers.length")

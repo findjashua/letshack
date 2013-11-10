@@ -4,7 +4,7 @@
 
   firebase_url = "https://letshack.firebaseio.com/";
 
-  app = angular.module('hackerApp', ['ui.router', 'firebase']);
+  app = angular.module('hackerApp', ['ui.router', 'ui.event', 'ui.map', 'firebase']);
 
   app.filter('filterByRole', function() {
     return function(input, rolelist) {
@@ -98,7 +98,7 @@
 
   app.controller('findHackerCtrl', [
     '$scope', function($scope) {
-      var ajax;
+      var ajax, hackers;
 
       ajax = function(url, _arg, cb) {
         var data, info, method;
@@ -165,6 +165,7 @@
         }
       ];
       $scope.reverseMatch = true;
+      $scope.hackers = [];
       $scope.setAllInterest = function(param) {
         var i, _i, _len, _ref, _results;
 
@@ -187,7 +188,39 @@
         }
         return _results;
       };
-      return $scope.hackers = [
+      $scope.initHackers = function(hackers) {
+        var h, _i, _len, _ref, _results;
+
+        $scope.hackers = hackers;
+        _ref = $scope.hackers;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          h = _ref[_i];
+          _results.push((function(h) {
+            var ll;
+
+            if (h.location) {
+              ll = new google.maps.LatLng(h.location.lat, h.location.long);
+              h.mapOptions = {
+                center: ll,
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+              };
+              return h.onMapIdle = function() {
+                return $scope.$apply(function() {
+                  return h.marker = new google.maps.Marker({
+                    map: h.googlemap,
+                    position: ll
+                  });
+                });
+              };
+            }
+          })(h));
+        }
+        return _results;
+      };
+      hackers = [
         {
           id: 1,
           name: 'Phil',
@@ -220,6 +253,10 @@
           interests: ['google glasses'],
           looking_for: ['backend'],
           idea: "I want to build a medical startup as well",
+          location: {
+            lat: 45,
+            long: -73
+          },
           match: 80
         }, {
           id: 4,
@@ -231,9 +268,18 @@
           interests: ['advertising'],
           looking_for: ['frontend'],
           idea: "I want to build a linkedin bluetooth app",
+          location: {
+            lat: 45,
+            long: -73
+          },
           match: 100
         }
       ];
+      return window.onGoogleReady = function() {
+        return $scope.$apply(function() {
+          return $scope.initHackers(hackers);
+        });
+      };
     }
   ]);
 
