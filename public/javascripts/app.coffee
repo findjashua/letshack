@@ -1,6 +1,6 @@
 firebase_url = "https://letshack.firebaseio.com/"
 
-app = angular.module 'hackerApp', ['ui.router','ui.event', 'ui.map','firebase']
+app = angular.module 'hackerApp', ['ui.router','ui.event', 'ui.map','firebase', 'ngAnimate']
 
 app.filter 'filterByRole', ->
 	(input, rolelist)->
@@ -19,6 +19,7 @@ app.filter 'filterByInterest', ->
 			if _.intersection(checked, i.interests).length
 				output.push i
 		output
+
 
 app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout', ($scope, angularFire, $timeout)->
 	ref = new Firebase(firebase_url+"messages")
@@ -93,23 +94,34 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 		for r in $scope.rolelist
 			r.checked = param
 
+	$scope.initLocation = (h)->
+		ll = new google.maps.LatLng(h.location.lat, h.location.long)
+		h.mapOptions = 
+			center: ll
+			zoom: 10
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+			disableDefaultUI: true
+		
+		h.onMapIdle = ->
+			$scope.$apply ->
+				h.marker = new google.maps.Marker
+					map: h.googlemap,
+					position: ll
+
 	$scope.initHackers = (hackers)->
 		$scope.hackers = hackers
 		for h in $scope.hackers
 			do (h)->
 				if h.location
-					ll = new google.maps.LatLng(h.location.lat, h.location.long)
-					h.mapOptions = 
-						center: ll
-						zoom: 10
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-						disableDefaultUI: true
-					
-					h.onMapIdle = ->
-						$scope.$apply ->
-							h.marker = new google.maps.Marker
-								map: h.googlemap,
-								position: ll
+					$scope.initLocation(h)
+				else
+					if h.locationName
+						fetch_address h.locationName, (latitude, longitude)->
+							if latitude && longitude
+								h.location = 
+									lat: latitude
+									long: longitude
+								$scope.initLocation(h)
 
 	hackers = [
 		{
@@ -121,6 +133,7 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 			interests: ['healthcare', 'social media']
 			looking_for: ['frontend', 'designer']
 			idea: "I want to build a medical startup"
+			locationName: "new york, ny"
 			match: 30
 		}
 		{
@@ -164,7 +177,18 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 		}
 	]
 	window.onGoogleReady = ->
+		window.geocoder = new google.maps.Geocoder()
 		$scope.$apply ->
 			$scope.initHackers hackers
 
 ]
+
+
+window.fetch_address = (address, cb)->
+	geocoder.geocode { 'address': address}, (results, status)->
+		if (status == google.maps.GeocoderStatus.OK)
+			latitude = results[0].geometry.location.lat();
+			longitude = results[0].geometry.location.lng();
+			cb(latitude, longitude)
+		else
+			cb(null)

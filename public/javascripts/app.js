@@ -4,7 +4,7 @@
 
   firebase_url = "https://letshack.firebaseio.com/";
 
-  app = angular.module('hackerApp', ['ui.router', 'ui.event', 'ui.map', 'firebase']);
+  app = angular.module('hackerApp', ['ui.router', 'ui.event', 'ui.map', 'firebase', 'ngAnimate']);
 
   app.filter('filterByRole', function() {
     return function(input, rolelist) {
@@ -188,6 +188,25 @@
         }
         return _results;
       };
+      $scope.initLocation = function(h) {
+        var ll;
+
+        ll = new google.maps.LatLng(h.location.lat, h.location.long);
+        h.mapOptions = {
+          center: ll,
+          zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true
+        };
+        return h.onMapIdle = function() {
+          return $scope.$apply(function() {
+            return h.marker = new google.maps.Marker({
+              map: h.googlemap,
+              position: ll
+            });
+          });
+        };
+      };
       $scope.initHackers = function(hackers) {
         var h, _i, _len, _ref, _results;
 
@@ -197,24 +216,20 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           h = _ref[_i];
           _results.push((function(h) {
-            var ll;
-
             if (h.location) {
-              ll = new google.maps.LatLng(h.location.lat, h.location.long);
-              h.mapOptions = {
-                center: ll,
-                zoom: 10,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                disableDefaultUI: true
-              };
-              return h.onMapIdle = function() {
-                return $scope.$apply(function() {
-                  return h.marker = new google.maps.Marker({
-                    map: h.googlemap,
-                    position: ll
-                  });
+              return $scope.initLocation(h);
+            } else {
+              if (h.locationName) {
+                return fetch_address(h.locationName, function(latitude, longitude) {
+                  if (latitude && longitude) {
+                    h.location = {
+                      lat: latitude,
+                      long: longitude
+                    };
+                    return $scope.initLocation(h);
+                  }
                 });
-              };
+              }
             }
           })(h));
         }
@@ -231,6 +246,7 @@
           interests: ['healthcare', 'social media'],
           looking_for: ['frontend', 'designer'],
           idea: "I want to build a medical startup",
+          locationName: "new york, ny",
           match: 30
         }, {
           id: 2,
@@ -276,11 +292,28 @@
         }
       ];
       return window.onGoogleReady = function() {
+        window.geocoder = new google.maps.Geocoder();
         return $scope.$apply(function() {
           return $scope.initHackers(hackers);
         });
       };
     }
   ]);
+
+  window.fetch_address = function(address, cb) {
+    return geocoder.geocode({
+      'address': address
+    }, function(results, status) {
+      var latitude, longitude;
+
+      if (status === google.maps.GeocoderStatus.OK) {
+        latitude = results[0].geometry.location.lat();
+        longitude = results[0].geometry.location.lng();
+        return cb(latitude, longitude);
+      } else {
+        return cb(null);
+      }
+    });
+  };
 
 }).call(this);

@@ -1,21 +1,21 @@
 extends layout
 
 block content
-	.pure-g
-		.pure-u-3-3(ng-controller="loginCtrl")
-					
-		.pure-u-3-3(ng-controller='setProfileCtrl')
-
-		.pure-u-2-3(ng-controller="findHackerCtrl")
-			.pd-1
+	.container
+		.row
+			.col-xs-12(ng-controller="loginCtrl", ng-cloak=true)
+		.row
+			.col-xs-12(ng-controller='setProfileCtrl', ng-cloak=true)
+		.row(ng-controller="findHackerCtrl", ng-cloak=true)
+			.col-xs-12
 				a(href="/linkedin/auth") Login with LinkedIn
 				#search.1-box
 					.v
-						label Any
-						input(ng-model="search.$")
-					.v
 						label name
 						input(ng-model="search.name")
+					.v
+						label idea
+						input(ng-model="search.idea")
 					.v
 						.v
 							.v(ng-repeat="rl in rolelist")
@@ -30,32 +30,32 @@ block content
 								input(type='checkbox' ng-model="i.checked")
 							a(ng-click="setAllInterest(true)") select all
 							a(ng-click="setAllInterest(false)") deselect all
-				div
-					h1.
-						List of users
-					#hackers(ng-if="hackers.length")
-						.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20")
-							h2 {{hacker.name}}
-							.skills.vv(ng-repeat="role in hacker.roles")
-								h3.skill.v 
-									| {{role}}&nbsp;
-									.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
-							.looking_fors.vv
-								h4.v
-									| Looking for: &nbsp;
-									.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
-							.interests.vv
-								h4.v
-									| Interested in: &nbsp;
-									.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
-							div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
-							div(ng-if='hacker.location' ui-map-marker="hacker.marker")
-							.idea {{hacker.idea}}
-							.match {{hacker.match}}%
-					#no_hackers(ng-if="!hackers.length")
-						| No hackers found!
-		.pure-u-1-3(ng-controller="messageCtrl")
-			.pd-1
+			
+				h1.
+					List of users
+			.col-xs-9
+				#hackers(ng-if="hackers.length")
+					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
+						h2 {{hacker.name}}
+						.skills.vv(ng-repeat="role in hacker.roles")
+							h3.skill.v 
+								| {{role}}&nbsp;
+								.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+						.looking_fors.vv
+							h4.v
+								| Looking for: &nbsp;
+								.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
+						.interests.vv
+							h4.v
+								| Interested in: &nbsp;
+								.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
+						div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
+						div(ng-if='hacker.location' ui-map-marker="hacker.marker")
+						.idea {{hacker.idea}}
+						.match {{hacker.match}}%
+				#no_hackers(ng-if="!hackers.length")
+					| No hackers found!
+			.col-xs-3(ng-controller="messageCtrl")
 				#messages
 					.msg.v(ng-repeat="msg in messages track by $index")
 						em {{msg.from}}:

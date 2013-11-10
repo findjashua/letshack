@@ -3,17 +3,25 @@ html(ng-app='hackerApp')
   head
     title Hacker Match
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.min.css')
-    link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css")
-    script(type='text/javascript', src='/javascripts/underscore.js')
+    link(rel='stylesheet', href='/stylesheets/font-awesome.css')
+    link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
     script(type='text/javascript', src='/javascripts/jquery.js')
+    script(type='text/javascript', src="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js")
+    script(type='text/javascript', src='/javascripts/underscore.js')
     script(type='text/javascript', src='/javascripts/angular/angular.js')
     script(type='text/javascript', src='/javascripts/angular/ui-router.js')
     script(type='text/javascript', src='/javascripts/angular/event.js')
     script(type='text/javascript', src='/javascripts/angular/maps.js')
+    script(type='text/javascript', src='/javascripts/angular/animate.js')
     script(type='text/javascript', src='https://cdn.firebase.com/v0/firebase.js')
     script(type='text/javascript', src='https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js')
     script(type='text/javascript', src='/javascripts/app.js')
   body
-    block content
+    nav.navbar.navbar-default role='navigation'
+        .navbar-header
+            
+
+    #content
+        block content
+    #footer
     script(type='text/javascript', src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady")

@@ -1,3 +1,7 @@
+[ng-cloak],
+.ng-cloak {
+  display: none !important;
+}
 body {
   background-color: #fff;
   font: 12px Helvetica, Arial, sans-serif;
@@ -52,4 +56,28 @@ a:hover {
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+.hacker-enter-setup,
+.hacker-leave-setup {
+  -webkit-transition: all ease-in-out 0.3s;
+  -moz-transition: all ease-in-out 0.3s;
+  -ms-transition: all ease-in-out 0.3s;
+  -o-transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.3s;
+}
+.hacker-enter-setup {
+  line-height: 0;
+  opacity: 0;
+}
+.hacker-enter-setup.hacker-enter-start {
+  line-height: 20px;
+  opacity: 1;
+}
+.hacker-leave-setup {
+  opacity: 1;
+  line-height: 20px;
+}
+.hacker-leave-setup.hacker-leave-start {
+  opacity: 0;
+  line-height: 0;
 }
