@@ -38,17 +38,17 @@ block content
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
 						h2 {{hacker.name}}
 						.skills.vv(ng-repeat="role in hacker.roles")
-							h3.skill.v 
+							h3.skill
 								| {{role}}&nbsp;
-								.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+								span.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
 						.looking_fors.vv
-							h4.v
+							h4
 								| Looking for: &nbsp;
-								.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
+								span.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
 						.interests.vv
-							h4.v
+							h4
 								| Interested in: &nbsp;
-								.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
+								span.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
 						div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
 						div(ng-if='hacker.location' ui-map-marker="hacker.marker")
 						.idea {{hacker.idea}}
