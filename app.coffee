@@ -42,6 +42,8 @@ app.use stylus.middleware(
 
 app.use express.static(__dirname + "/public")
 
+app.get '/status', (req, res)->
+  res.send 'up and running!'
 
 app.get "/", (req, res)->
   res.render('index', { title: 'Express'})
