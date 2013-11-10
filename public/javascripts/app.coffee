@@ -79,7 +79,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		for k,v of $scope.new_user_profile
 			transformed_user_profile_data[k] = (kk for kk,vv of v)
 		
-		ajax "/user/profile", {method: 'put', data: transformed_user_profile_data}, (data)->
+		ajax "/user", {method: 'put', data: transformed_user_profile_data}, (data)->
 			console.log data
 
 

@@ -147,7 +147,7 @@
             return _results;
           })();
         }
-        return ajax("/user/profile", {
+        return ajax("/user", {
           method: 'put',
           data: transformed_user_profile_data
         }, function(data) {
