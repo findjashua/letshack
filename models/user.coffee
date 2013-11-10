@@ -68,6 +68,7 @@ exports.update = (req, res)->
 		res.redirect "/linkedin/login"
 	User.update {"auth.id" : "#{req.session.authId}"}, req.body, (err, data)->
 		return res.send err if err?
+		req.session.complete = true
 		return res.send 200
 
 
