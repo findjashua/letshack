@@ -2,7 +2,6 @@
 ###
 Module dependencies.
 ###
-require('coffee-script')
 express = require("express")
 routes = require("./routes")
 user = require("./routes/user")

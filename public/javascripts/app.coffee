@@ -1,4 +1,6 @@
-app = angular.module 'hackerApp', ['ui.router']
+firebase_url = "https://letshack.firebaseio.com/"
+
+app = angular.module 'hackerApp', ['ui.router', 'firebase']
 
 app.filter 'filterByRole', ->
 	(input, rolelist)->
@@ -18,7 +20,20 @@ app.filter 'filterByInterest', ->
 				output.push i
 		output
 
-app.controller 'hackerCtrl', ['$scope', ($scope)->
+app.controller 'messageCtrl', ['$scope', 'angularFire', ($scope, angularFire)->
+	ref = new Firebase(firebase_url+"messages")
+	$scope.messages = []
+	angularFire(ref.limit(100), $scope, 'messages')
+	$scope.addMessage = (e)->
+		return if e.keyCode!=13
+		$scope.messages.push {from: 'anonymous', msg: $scope.msg}
+		$scope.msg = ''
+]
+
+app.controller 'setProfileCtrl', ['$scope', ($scope)->
+]
+
+app.controller 'findHackerCtrl', ['$scope', ($scope)->
 	ajax = (url, {method, data} , cb)->
 		info = 
 			url: url
@@ -57,7 +72,7 @@ app.controller 'hackerCtrl', ['$scope', ($scope)->
 	$scope.setAllInterest = (param)->
 		for i in $scope.interestlist
 			i.checked = param
-			
+
 	$scope.setAllRole = (param)->
 		for r in $scope.rolelist
 			r.checked = param
@@ -70,6 +85,7 @@ app.controller 'hackerCtrl', ['$scope', ($scope)->
 			skillsets:
 				backend: ['ruby', 'node']
 			interests: ['healthcare', 'social media']
+			looking_for: ['frontend', 'designer']
 			idea: "I want to build a medical startup"
 			match: 30
 		}
@@ -80,6 +96,7 @@ app.controller 'hackerCtrl', ['$scope', ($scope)->
 			skillsets:
 				hustler: ['excel']
 			interests: ['wearables']
+			looking_for: ['frontend', 'backend', 'designer']
 			idea: "I want to build a dog food startup"
 			match: 50
 		}
@@ -90,6 +107,7 @@ app.controller 'hackerCtrl', ['$scope', ($scope)->
 			skillsets:
 				mobile: ['ios', 'android']
 			interests: ['google glasses']
+			looking_for: ['backend']
 			idea: "I want to build a medical startup as well"
 			match: 80
 		}
@@ -100,6 +118,7 @@ app.controller 'hackerCtrl', ['$scope', ($scope)->
 			skillsets:
 				mobile: ['node', 'ruby on rails']
 			interests: ['advertising']
+			looking_for: ['frontend']
 			idea: "I want to build a linkedin bluetooth app"
 			match: 100
 		}

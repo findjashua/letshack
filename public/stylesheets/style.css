@@ -9,6 +9,9 @@ a:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+.pd-1 {
+  padding: 1em;
+}
 .hacker {
   border: 1px solid #ccc;
   margin-bottom: 5px;

@@ -1,43 +1,58 @@
 extends layout
 
 block content
-	div(ng-controller="hackerCtrl")
-		#search
-			.v
-				label Any
-				input(ng-model="search.$")
-			.v
-				label name
-				input(ng-model="search.name")
-			.v
-				.v
-					.v(ng-repeat="rl in rolelist")
-						label {{rl.name}}
-						input(type="checkbox" ng-model="rl.checked")
-					a(ng-click="setAllRole(true)") select all
-					a(ng-click="setAllRole(false)") deselect all
-			.v
-				.v
-					.v(ng-repeat="i in interestlist")
-						label {{i.name}}
-						input(type='checkbox' ng-model="i.checked")
-					a(ng-click="setAllInterest(true)") select all
-					a(ng-click="setAllInterest(false)") deselect all
-		div
-			h1.
-				List of users
-			#hackers(ng-if="hackers.length")
-				.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20")
-					h2 {{hacker.name}}
-					.skills.vv(ng-repeat="role in hacker.roles")
-						h3.skill.v 
-							| {{role}}&nbsp;
-							.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
-					.interests.vv
-						h4.v
-							| Interested in: &nbsp;
-							.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
-					.idea {{hacker.idea}}
-					.match {{hacker.match}}%
-			#no_hackers(ng-if="!hackers.length")
-				| No hackers found!
+	.pure-g
+		.pure-u-3-3(ng-controller='setProfileCtrl')
+
+		.pure-u-2-3(ng-controller="findHackerCtrl")
+			.pd-1
+				#search.1-box
+					.v
+						label Any
+						input(ng-model="search.$")
+					.v
+						label name
+						input(ng-model="search.name")
+					.v
+						.v
+							.v(ng-repeat="rl in rolelist")
+								label {{rl.name}}
+								input(type="checkbox" ng-model="rl.checked")
+							a(ng-click="setAllRole(true)") select all
+							a(ng-click="setAllRole(false)") deselect all
+					.v
+						.v
+							.v(ng-repeat="i in interestlist")
+								label {{i.name}}
+								input(type='checkbox' ng-model="i.checked")
+							a(ng-click="setAllInterest(true)") select all
+							a(ng-click="setAllInterest(false)") deselect all
+				div
+					h1.
+						List of users
+					#hackers(ng-if="hackers.length")
+						.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20")
+							h2 {{hacker.name}}
+							.skills.vv(ng-repeat="role in hacker.roles")
+								h3.skill.v 
+									| {{role}}&nbsp;
+									.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+							.looking_fors.vv
+								h4.v
+									| Looking for: &nbsp;
+									.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
+							.interests.vv
+								h4.v
+									| Interested in: &nbsp;
+									.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
+							.idea {{hacker.idea}}
+							.match {{hacker.match}}%
+					#no_hackers(ng-if="!hackers.length")
+						| No hackers found!
+		.pure-u-1-3(ng-controller="messageCtrl")
+			.pd-1
+				#messages
+					.msg.v(ng-repeat="msg in messages track by $index")
+						em {{msg.from}}:
+						p {{msg.msg}}
+				input(type='text', ng-model='msg', ng-keydown='addMessage($event)' placeholder='Say something here!')
