@@ -37,3 +37,10 @@ a:hover {
 .v > *:last-child {
   margin-right: 0;
 }
+#messages {
+  max-height: 500px;
+  padding: 3px;
+  background-color: #ccc;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

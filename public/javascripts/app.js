@@ -61,13 +61,13 @@
   });
 
   app.controller('messageCtrl', [
-    '$scope', 'angularFire', function($scope, angularFire) {
+    '$scope', 'angularFire', '$timeout', function($scope, angularFire, $timeout) {
       var ref;
 
       ref = new Firebase(firebase_url + "messages");
       $scope.messages = [];
       angularFire(ref.limit(100), $scope, 'messages');
-      return $scope.addMessage = function(e) {
+      $scope.addMessage = function(e) {
         if (e.keyCode !== 13) {
           return;
         }
@@ -75,8 +75,18 @@
           from: 'anonymous',
           msg: $scope.msg
         });
+        $scope.scrollBottom();
         return $scope.msg = '';
       };
+      $scope.scrollBottom = function() {
+        var scrollDiv;
+
+        scrollDiv = document.getElementById('messages');
+        return scrollDiv.scrollTop += scrollDiv.scrollHeight;
+      };
+      return $timeout(function() {
+        return $scope.scrollBottom();
+      }, 1000);
     }
   ]);
 

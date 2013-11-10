@@ -1,6 +1,7 @@
 ensureAuthenticated = (req, res, next) ->
   return next()  if req.isAuthenticated()
   res.redirect "/login"
+  
 express = require("express")
 passport = require("passport")
 linkedin = require("passport-linkedin-oauth2")
@@ -56,7 +57,6 @@ app.get "/linkedin/login", (req, res) ->
   user = req.user
   return res.send user if user?
   res.send '<a href="/linkedin/auth">Login with LinkedIn</a>'
-
 
 app.get "/linkedin/account", ensureAuthenticated, (req, res) ->
   res.send req.user

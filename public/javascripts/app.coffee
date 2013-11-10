@@ -20,14 +20,24 @@ app.filter 'filterByInterest', ->
 				output.push i
 		output
 
-app.controller 'messageCtrl', ['$scope', 'angularFire', ($scope, angularFire)->
+app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout', ($scope, angularFire, $timeout)->
 	ref = new Firebase(firebase_url+"messages")
 	$scope.messages = []
 	angularFire(ref.limit(100), $scope, 'messages')
+	
 	$scope.addMessage = (e)->
 		return if e.keyCode!=13
 		$scope.messages.push {from: 'anonymous', msg: $scope.msg}
+		$scope.scrollBottom()
 		$scope.msg = ''
+	
+	$scope.scrollBottom = ->
+		scrollDiv = document.getElementById 'messages'
+		scrollDiv.scrollTop+=scrollDiv.scrollHeight
+
+	$timeout ->
+		$scope.scrollBottom()
+	, 1000
 ]
 
 app.controller 'loginCtrl', ['$scope', ($scope)->
