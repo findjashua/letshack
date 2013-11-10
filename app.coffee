@@ -26,15 +26,32 @@ app.use passport.initialize()
 app.use passport.session()
 app.use express.bodyParser()
 app.use express.methodOverride()
+
+app.use (req, res, next)->
+  user_session = if req.session.id
+    {
+      id: req.session.id
+      name: req.session.name
+      pictureUrl: req.session.pictureUrl
+      authId: req.session.authId
+    }
+  else
+    null
+  res.locals.user_session = user_session
+  next()
+
 app.use app.router
+
 app.use stylus.middleware(
 	src: __dirname + '/views'
 	dest: __dirname + '/public'
 )
+
 app.use express.static(__dirname + "/public")
 
+
 app.get "/", (req, res)->
-  res.render('index', { title: 'Express' })
+  res.render('index', { title: 'Express'})
 
 ###############LinkedIn#################
 
@@ -49,15 +66,22 @@ passport.serializeUser (user, done) ->
 passport.deserializeUser (obj, done) ->
   done null, obj
 
+setSession = (req, accessToken, data)->
+  req.session.accessToken = accessToken
+  req.session.id = data._id
+  req.session.authId = data.auth.id
+  req.session.name = data.name
+  req.session.pictureUrl = data.pictureUrl
+
 passport.use new LinkedinStrategy(
   clientID: LINKEDIN_CLIENT_ID
   clientSecret: LINKEDIN_CLIENT_SECRET
   callbackURL: "http://localhost:3000/linkedin/auth/callback"
   passReqToCallback: true
 , (req, accessToken, refreshToken, profile, done) ->
-  req.session.accessToken = accessToken
-  require("./models/user").upsert 'linkedin', accessToken, profile
-  done null, profile
+    require("./models/user").upsert 'linkedin', accessToken, profile, (err, data)->
+      setSession req, accessToken, data
+      done null, profile
 )
 
 ensureAuthenticated = (req, res, next) ->
@@ -84,6 +108,7 @@ app.get "/linkedin/auth/callback", passport.authenticate("linkedin",
 
 app.get "/linkedin/logout", (req, res) ->
   req.logout()
+  req.session.destroy()
   res.redirect "/linkedin/login"
 
 

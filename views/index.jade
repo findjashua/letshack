@@ -1,5 +1,8 @@
 extends layout
 
+block extra_header
+	script(type='text/javascript').
+		var session_data = !{JSON.stringify(user_session)};
 block content
 	.container
 		.row

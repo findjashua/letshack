@@ -16,6 +16,7 @@ schema = new Schema
 	industries : [String]
 	ideas : [String]
 	location : {type : String}
+	pictureUrl : {type : String}
 	pings : 
 		unresponded : [Schema.Types.Objectid]
 		accepted : [Schema.Types.Objectid]
@@ -25,10 +26,13 @@ schema = new Schema
 
 User = db.model 'User', schema
 
-exports.upsert = (authProvider, accessToken, profile)-> 
+setSession = (req, user)->
+
+
+exports.upsert = (authProvider, accessToken, profile, callback)-> 
 	condition =  "auth.id" : "#{profile.id}"
-	User.count condition, (err, data)->
-		if data is 0
+	User.findOne condition, (err, data)->
+		if not data?
 			user = new User
 				auth : 
 					provider : authProvider
@@ -36,8 +40,12 @@ exports.upsert = (authProvider, accessToken, profile)->
 					token : accessToken
 				name : profile.displayName
 				location : profile._json.location.name
+				pictureUrl : profile._json.pictureUrl
 			user.save (err, data)->
 				console.log err if err?
+				callback null, data
+		else
+			callback null, data
 
 exports.list = (req, res)->
 	user = User.find (err, data)->
