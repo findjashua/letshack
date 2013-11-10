@@ -52,7 +52,7 @@
       })();
       for (_i = 0, _len = input.length; _i < _len; _i++) {
         i = input[_i];
-        if (_.intersection(checked, i.interests).length) {
+        if (_.intersection(checked, i.industries).length) {
           output.push(i);
         }
       }
@@ -129,7 +129,7 @@
 
   app.controller('findHackerCtrl', [
     '$scope', '$window', '$http', function($scope, $window, $http) {
-      var ajax, hackers;
+      var ajax;
 
       $scope.session_data = $window.session_data;
       $scope.isComplete = $window.session_data && $window.session_data.complete;
@@ -141,6 +141,11 @@
         seeking_roles: {},
         seeking_skills: {}
       };
+      $scope.setOrderType = function(order) {
+        $scope.orderType = "-score." + order;
+        return $scope.orderToken = order;
+      };
+      $scope.setOrderType('match_score');
       ajax = function(url, _arg, cb) {
         var data, info, method;
 
@@ -193,7 +198,12 @@
           $scope.isComplete = true;
           $scope.profile_data = transformed_user_profile_data;
           return $scope.fetch_user($scope.session_data.authId, function(data) {
-            return $scope.you = data;
+            $scope.you = data;
+            return $scope.fetchHackers(function(hackers) {
+              return $scope.$apply(function() {
+                return $scope.initHackers(hackers);
+              });
+            });
           });
         });
       };
@@ -302,6 +312,28 @@
           });
         };
       };
+      $scope.fetchHackers = function(hackers) {
+        return ajax("/matches", {}, function(data) {
+          var i, s, score, scores, scores_map, u, userList, _i, _j, _len, _len1;
+
+          scores = data.scores, userList = data.userList;
+          scores_map = {};
+          hackers = [];
+          for (_i = 0, _len = scores.length; _i < _len; _i++) {
+            s = scores[_i];
+            scores_map[s.id.toString()] = s;
+          }
+          for (i = _j = 0, _len1 = userList.length; _j < _len1; i = ++_j) {
+            u = userList[i];
+            if (score = scores_map[u.auth.id.toString()]) {
+              u.scores = score;
+              hackers.push(u);
+            }
+          }
+          console.log(hackers);
+          return $scope.hackers = hackers;
+        });
+      };
       $scope.initHackers = function(hackers) {
         var h, _i, _len, _ref, _results;
 
@@ -330,54 +362,6 @@
         }
         return _results;
       };
-      hackers = [
-        {
-          id: 1,
-          name: 'Phil',
-          roles: ['backend'],
-          skills: ['ruby', 'node'],
-          interests: ['healthcare', 'social media'],
-          looking_for: ['frontend', 'designer'],
-          idea: "I want to build a medical startup",
-          locationName: "new york, ny",
-          match: 30
-        }, {
-          id: 2,
-          name: 'Eve',
-          roles: ['business'],
-          skills: ['pitching'],
-          interests: ['wearables'],
-          looking_for: ['frontend', 'backend', 'designer'],
-          idea: "I want to build a dog food startup",
-          match: 50
-        }, {
-          id: 3,
-          name: 'Omar',
-          roles: ['mobile'],
-          skills: ['ios', 'android'],
-          interests: ['google glasses'],
-          looking_for: ['backend'],
-          idea: "I want to build a medical startup as well",
-          location: {
-            lat: 45,
-            long: -73
-          },
-          match: 80
-        }, {
-          id: 4,
-          name: 'Jashua',
-          roles: ['backend'],
-          skills: ['node', 'ruby on rails'],
-          interests: ['advertising'],
-          looking_for: ['frontend'],
-          idea: "I want to build a linkedin bluetooth app",
-          location: {
-            lat: 45,
-            long: -73
-          },
-          match: 100
-        }
-      ];
       $scope.displayChecked = function(h) {
         var checked, hh;
 
@@ -401,16 +385,18 @@
           return checked.join(', ');
         }
       };
-      if ($scope.isComplete) {
-        $scope.fetch_user($window.session_data.authId, function(data) {
-          return $scope.you = data;
-        });
-      }
       return window.onGoogleReady = function() {
         window.geocoder = new google.maps.Geocoder();
-        return $scope.$apply(function() {
-          return $scope.initHackers(hackers);
-        });
+        if ($scope.isComplete) {
+          return $scope.fetch_user($window.session_data.authId, function(data) {
+            $scope.you = data;
+            return $scope.fetchHackers(function(hackers) {
+              return $scope.$apply(function() {
+                return $scope.initHackers(hackers);
+              });
+            });
+          });
+        }
       };
     }
   ]);

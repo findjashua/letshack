@@ -63,7 +63,7 @@ block content
 						input.form_control(ng-model="search.idea",placeholder="Search by idea")
 					.v
 						.v
-							label Select Roles:
+							label Filter by Roles:
 							.select_container 
 								span &nbsp;{{displayChecked(rolelist)}}
 								ul.select_inner.list-unstyled
@@ -76,7 +76,7 @@ block content
 										a(ng-click="setAll('rolelist',false)") deselect all
 					.v
 						.v
-							label Select Skills:
+							label Filter by Skills:
 							.select_container
 								span &nbsp;{{displayChecked(skillslist)}}
 								ul.select_inner.list-unstyled
@@ -89,7 +89,7 @@ block content
 										a(ng-click="setAll('skillslist',false)") deselect all
 					.v
 						.v
-							label Select Industries:
+							label Filter by Industries:
 							.select_container
 								span &nbsp;{{displayChecked(interestlist)}}
 								ul.select_inner.list-unstyled
@@ -104,36 +104,38 @@ block content
 						.v
 							#sortby_selection.v
 								label Sort by: 
-								a.btn.btn-default(ng-click="sortBy('bestCandidate')", ng-class="{sel: sortby=='bestCandidate'}") Best candidates
-								a.btn.btn-default(ng-click="sortBy('desiredBy')", ng-class="{sel: sortby=='desiredBy'}") Most desired by
-								a.btn.btn-default(ng-click="sortBy('bestMatch')", ng-class="{sel: sortby=='bestMatch'}") Best match
+								a.btn.btn-default(ng-click="setOrderType('you_want_them')", ng-class="{sel: orderToken=='you_want_them'}") Best candidates
+								a.btn.btn-default(ng-click="setOrderType('they_want_you')", ng-class="{sel: orderToken=='they_want_you'}") Most desired by
+								a.btn.btn-default(ng-click="setOrderType('match_score')", ng-class="{sel: orderToken=='match_score'}") Best match
 			
 				h1.
 					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
 			.col-xs-9(ng-show="isComplete")
 				#hackers(ng-if="hackers.length")
-					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
+					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:[orderType] | limitTo: 20", ng-animate="'hacker'")
 						h2
-							| {{hacker.name}} 
+							| {{hacker.name}}
 							span.smaller ({{hacker.roles.join(', ')}})
-						.skills.vv(ng-repeat="role in hacker.roles")
-								
-							.skill(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+						.skills.vv
+							.skill(ng-show='hacker.skills.length') ({{hacker.skills.join(', ')}})
 						.looking_fors.vv
 							h4
 								| Looking for: &nbsp;
-								span.looking_for(ng-show='hacker.looking_for.length') {{hacker.looking_for.join(', ')}}
+								span.looking_for(ng-show='hacker.seeking_roles.length') {{hacker.seeking_roles.join(', ')}}
 						.interests.vv
 							h4
-								| Interested in: &nbsp;
-								span.interests(ng-show='hacker.interests.length') {{hacker.interests.join(', ')}}
-						div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
+								| Seeking skills: &nbsp;
+								span.interests(ng-show='hacker.seeking_skills.length') {{hacker.seeking_skills.join(', ')}}
+						//div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
 						div(ng-if='hacker.location' ui-map-marker="hacker.marker")
-						.idea {{hacker.idea}}
-						.match {{hacker.match}}%
+						.idea {{hacker.ideas[0]}}
+						.match.v
+							.you_want_them {{hacker.scores.you_want_them | number:1}}%&nbsp;
+							.they_want_you {{hacker.scores.they_want_you | number:1}}%&nbsp;
+							.match_score {{hacker.scores.match_score | number:1}}%
 				#no_hackers(ng-if="!hackers.length")
 					| No hackers found!
-			.col-xs-3(ng-controller="messageCtrl", ng-show="isComplete")
+			.col-xs-3(ng-controller="messageCtrl", ng-show="false && isComplete")
 				#messages
 					.msg.v(ng-repeat="msg in messages track by $index")
 						em {{msg.from}}:
