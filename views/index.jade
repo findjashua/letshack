@@ -60,50 +60,46 @@ block content
 						p {{you.ideas[0]}}
 				#search.1-box
 					.v
-						label name
-						input(ng-model="search.name")
-					.v
-						label idea
-						input(ng-model="search.idea")
+						input.form_control(ng-model="search.idea",placeholder="Search by idea")
 					.v
 						.v
+							label Select Roles:
 							.select_container 
-								span Select Roles:
+								span &nbsp;{{displayChecked(rolelist)}}
 								ul.select_inner.list-unstyled
 									li(ng-repeat="rl in rolelist", ng-class="{sel: rl.checked}")
-										input(type="checkbox" ng-model="rl.checked")
-										label &nbsp;{{rl.name}}
+										input(id="check_{{rl.name|space2under}}" type="checkbox" ng-model="rl.checked")
+										label(for="check_{{rl.name|space2under}}") &nbsp;{{rl.name}}
 									li
 										a(ng-click="setAll('rolelist',true)") select all
 									li
 										a(ng-click="setAll('rolelist',false)") deselect all
-							| &nbsp;{{displayChecked(rolelist)}}
 					.v
 						.v
+							label Select Skills:
 							.select_container
-								span Select Skills:
+								span &nbsp;{{displayChecked(skillslist)}}
 								ul.select_inner.list-unstyled
 									li(ng-repeat="s in skillslist", ng-class="{sel: s.checked}")
-										input(type='checkbox' ng-model="s.checked")
-										label &nbsp;{{s.name}}
+										input(id="check_{{s.name|space2under}}" type='checkbox' ng-model="s.checked")
+										label(for="check_{{s.name|space2under}}") &nbsp;{{s.name}}
 									li
 										a(ng-click="setAll('skillslist',true)") select all
 									li
 										a(ng-click="setAll('skillslist',false)") deselect all
-							| &nbsp;{{displayChecked(skillslist)}}
 					.v
 						.v
+							label Select Industries:
 							.select_container
-								span Select Industries:
+								span &nbsp;{{displayChecked(interestlist)}}
 								ul.select_inner.list-unstyled
 									li(ng-repeat="i in interestlist", ng-class="{sel: i.checked}")
-										input(type='checkbox' ng-model="i.checked")
-										label &nbsp;{{i.name}}
+										input(id="check_{{i.name|space2under}}" type='checkbox' ng-model="i.checked")
+										label(for="check_{{i.name|space2under}}") &nbsp;{{i.name}}
 									li
 										a(ng-click="setAll('interestlist',true)") select all
 									li
 										a(ng-click="setAll('interestlist',false)") deselect all
-							| &nbsp;{{displayChecked(interestlist)}}
 					.v
 						.v
 							#sortby_selection.v
@@ -117,11 +113,12 @@ block content
 			.col-xs-9(ng-show="isComplete")
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
-						h2 {{hacker.name}}
+						h2
+							| {{hacker.name}} 
+							span.smaller ({{hacker.roles.join(', ')}})
 						.skills.vv(ng-repeat="role in hacker.roles")
-							h3.skill
-								| {{role}}&nbsp;
-								span.skillsets(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
+								
+							.skill(ng-show='hacker.skillsets[role].length') ({{hacker.skillsets[role].join(', ')}})
 						.looking_fors.vv
 							h4
 								| Looking for: &nbsp;

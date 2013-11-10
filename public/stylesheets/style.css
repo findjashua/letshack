@@ -108,7 +108,10 @@ a:hover {
   position: relative;
 }
 .select_container > span {
-  font-weight: bold;
+  font-weight: normal;
+}
+.select_container:hover > span {
+  text-decoration: underline;
 }
 .select_container:hover .select_inner {
   opacity: 1;
@@ -137,12 +140,19 @@ a:hover {
 .select_container .select_inner li input[type=checkbox] {
   cursor: pointer;
 }
+.select_container .select_inner li label {
+  cursor: pointer;
+  font-weight: normal;
+}
 .select_container .select_inner li.sel {
   background-color: #6ba3ed;
   color: #fff;
 }
 .select_container .select_inner li.last-child {
   border: none;
+}
+.smaller {
+  font-size: 0.8em;
 }
 #sortby_selection a.sel {
   background-color: #ddd;

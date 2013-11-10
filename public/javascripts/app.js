@@ -87,6 +87,12 @@
     };
   });
 
+  app.filter('space2under', function() {
+    return function(text) {
+      return text.replace(/\s/, '_');
+    };
+  });
+
   app.controller('messageCtrl', [
     '$scope', 'angularFire', '$timeout', '$http', function($scope, angularFire, $timeout, $http) {
       var ref;

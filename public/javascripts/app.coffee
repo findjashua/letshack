@@ -29,6 +29,10 @@ app.filter 'filterBySkills', ->
 				output.push i
 		output
 
+app.filter 'space2under', ->
+	(text)->
+		text.replace(/\s/,'_')
+
 app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout','$http', ($scope, angularFire, $timeout, $http)->
 	ref = new Firebase(firebase_url+"messages")
 	$scope.messages = []

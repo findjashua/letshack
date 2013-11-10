@@ -95,8 +95,10 @@ a
 .select_container
 	position: relative
 	> span
-		font-weight: bold
+		font-weight: normal
 	&:hover
+		> span
+			text-decoration: underline
 		.select_inner
 			opacity: 1
 			display: block
@@ -121,11 +123,16 @@ a
 				cursor: pointer
 			padding: 3px
 			border-bottom: 1px solid #aaa
+			label
+				cursor: pointer
+				font-weight: normal
 			&.sel
 				background-color: #6BA3ED
 				color: white
 			&.last-child
 				border: none
+.smaller
+	font-size: .8em
 #sortby_selection
 	a
 		&.sel
