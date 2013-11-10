@@ -23,7 +23,7 @@ schema = new Schema
 		unresponded : [Schema.Types.Objectid]
 		accepted : [Schema.Types.Objectid]
 		rejected : [Schema.Types.Objectid]	
-	completed : {type : Boolean}
+	complete : {type : Boolean}
 
 User = db.model 'User', schema
 
