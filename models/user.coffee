@@ -141,6 +141,11 @@ exports.update = (req, res)->
 			computeScores user
 			return res.send 200
 
+exports.delete = (req, res)->
+	User.findAndRemove {"auth.id" : "#{req.params.authId}"}, (err, user)->
+		return res.send err if err?
+		res.send 'deleted user'
+
 exports.matches = (req, res)->
 	User.find (err, users)->
 		return res.send err if err?
@@ -150,6 +155,10 @@ exports.matches = (req, res)->
 				scores : user.scores
 				userList : users
 			return res.send payload
+
+exports.drop = (req, res)->
+	User.remove {}, (err)->
+		res.send 'removed user collection'
 
 
 

@@ -169,11 +169,14 @@ app.get '/user', ensureAuthenticated, user.list
 app.post '/user', ensureAuthenticated, user.create
 app.get '/user/:authId', ensureAuthenticated, user.find
 app.put '/user', ensureAuthenticated, user.update
+app.delete '/user/:authId', ensureAuthenticated, user.delete
 app.get '/matches', ensureAuthenticated, user.matches
-#app.delete '/user/:name', user.delete
+app.post '/user/drop', ensureAuthenticated, user.drop
 
 event = require './models/event'
-app.get 'attendees/:eventId', event.getAttendees
+app.get 'attendees/:eventId', ensureAuthenticated, event.getAttendees
+app.delete '/event/:eventId', ensureAuthenticated, event.delete
+app.post '/event/drop', ensureAuthenticated, event.drop
 
 
 http = require("http")

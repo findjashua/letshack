@@ -32,4 +32,12 @@ exports.getAttendees = (req, res)->
 				if not err?
 					attendees.push user
 
+exports.delete = (req, res)->
+	User.findAndRemove {"eventId" : "#{req.params.eventId}"}, (err, user)->
+		return res.send err if err?
+		res.send 'deleted event'
+
+exports.drop = (req, res)->
+	Event.remove {}, (err)->
+		res.send 'removed event collection'
 
