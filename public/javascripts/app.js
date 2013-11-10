@@ -148,7 +148,7 @@
           })();
         }
         return ajax("/user/profile", {
-          method: 'post',
+          method: 'put',
           data: transformed_user_profile_data
         }, function(data) {
           return console.log(data);

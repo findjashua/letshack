@@ -59,7 +59,6 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		seeking_roles: {}
 		seeking_skills: {}
 
-
 	ajax = (url, {method, data} , cb)->
 		info = 
 			url: url
@@ -80,7 +79,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		for k,v of $scope.new_user_profile
 			transformed_user_profile_data[k] = (kk for kk,vv of v)
 		
-		ajax "/user/profile", {method: 'post', data: transformed_user_profile_data}, (data)->
+		ajax "/user/profile", {method: 'put', data: transformed_user_profile_data}, (data)->
 			console.log data
 
 
