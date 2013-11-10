@@ -77,11 +77,13 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 	$scope.submit_profile = ->
 		transformed_user_profile_data = {}
 		for k,v of $scope.new_user_profile
-			transformed_user_profile_data[k] = (kk for kk,vv of v)
-		
-		ajax "/user", {method: 'put', data: transformed_user_profile_data}, (data)->
-			console.log data
+			transformed_user_profile_data[k] = (kk for kk,vv of v when vv)
 
+		transformed_user_profile_data.complete = true
+
+		ajax "/user", {method: 'put', data: {profile_data: transformed_user_profile_data}}, (data)->
+			$scope.session_data.complete = true
+			$scope.isComplete = true
 
 	$scope.rolelist = [
 		{name: 'frontend', checked:true}

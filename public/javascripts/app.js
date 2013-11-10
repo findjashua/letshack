@@ -142,16 +142,22 @@
             _results = [];
             for (kk in v) {
               vv = v[kk];
-              _results.push(kk);
+              if (vv) {
+                _results.push(kk);
+              }
             }
             return _results;
           })();
         }
+        transformed_user_profile_data.complete = true;
         return ajax("/user", {
           method: 'put',
-          data: transformed_user_profile_data
+          data: {
+            profile_data: transformed_user_profile_data
+          }
         }, function(data) {
-          return console.log(data);
+          $scope.session_data.complete = true;
+          return $scope.isComplete = true;
         });
       };
       $scope.rolelist = [
