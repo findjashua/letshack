@@ -1,5 +1,6 @@
 mongoose = require 'mongoose'
 eventbrite = require '../apis/eventbrite'
+Event = require './event.coffee'
 
 url = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/letshack'
 db = mongoose.createConnection url
@@ -35,9 +36,11 @@ userSchema = new Schema
 
 User = db.model 'User', userSchema
 
-getEvents = (accessToken, callback)->
+getEvents = (accessToken, attendeeId, callback)->
 	eventbrite.getEvents accessToken, (err, events)->
 		console.log err if err?
+		for event in events
+			Event.createOrUpdate event.id, attendeeId
 		callback null, events
 
 exports.upsert = (authProvider, accessToken, profile, callback)-> 
@@ -54,8 +57,7 @@ exports.upsert = (authProvider, accessToken, profile, callback)->
 				pictureUrl : profile._json.pictureUrl
 		else
 			user.auth.token = accessToken
-		getEvents accessToken, (err, events)->
-			console.log events
+		getEvents accessToken, profile.id, (err, events)->
 			user.events = events
 			user.save (err, data)->
 				return console.log err if err?	
