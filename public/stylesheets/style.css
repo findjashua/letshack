@@ -104,6 +104,33 @@ a:hover {
   opacity: 0;
   line-height: 0;
 }
+.select_container {
+  position: relative;
+}
+.select_container > span {
+  font-weight: bold;
+}
+.select_container:hover .select_inner {
+  opacity: 1;
+  display: block;
+}
+.select_container .select_inner {
+  -webkit-transition: all ease-in-out 0.3s;
+  -moz-transition: all ease-in-out 0.3s;
+  -ms-transition: all ease-in-out 0.3s;
+  -o-transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.3s;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  top: 20px;
+  left: -5px;
+  z-index: 2;
+  background-color: #fff;
+  padding: 5px;
+  box-shadow: 0 0 3px 0 #ccc;
+  width: 200px;
+}
 #sortby_selection a.sel {
   background-color: #ddd;
 }

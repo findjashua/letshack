@@ -372,6 +372,29 @@
           match: 100
         }
       ];
+      $scope.displayChecked = function(h) {
+        var checked, hh;
+
+        checked = (function() {
+          var _i, _len, _results;
+
+          _results = [];
+          for (_i = 0, _len = h.length; _i < _len; _i++) {
+            hh = h[_i];
+            if (hh.checked) {
+              _results.push(hh.name);
+            }
+          }
+          return _results;
+        })();
+        if (checked.length === _.size(h)) {
+          return "all selected";
+        } else if (checked.length === 0) {
+          return "none";
+        } else {
+          return checked.join(', ');
+        }
+      };
       if ($scope.isComplete) {
         $scope.fetch_user($window.session_data.authId, function(data) {
           return $scope.you = data;

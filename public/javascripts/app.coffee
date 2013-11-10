@@ -218,6 +218,15 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		}
 	]
 
+	$scope.displayChecked = (h)->
+		checked = (hh.name for hh in h when hh.checked)
+		if checked.length==_.size(h)
+			"all selected"
+		else if checked.length==0
+			"none"
+		else
+			checked.join(', ')
+
 	if $scope.isComplete
 		$scope.fetch_user $window.session_data.authId, (data)->
 			$scope.you = data

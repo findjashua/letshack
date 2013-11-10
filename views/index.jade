@@ -67,28 +67,43 @@ block content
 						input(ng-model="search.idea")
 					.v
 						.v
-							label Roles:
-							.v(ng-repeat="rl in rolelist")
-								input(type="checkbox" ng-model="rl.checked")
-								label &nbsp;{{rl.name}}
-							a(ng-click="setAll('rolelist',true)") select all
-							a(ng-click="setAll('rolelist',false)") deselect all
+							.select_container 
+								span Select Roles:
+								ul.select_inner.list-unstyled
+									li(ng-repeat="rl in rolelist")
+										input(type="checkbox" ng-model="rl.checked")
+										label &nbsp;{{rl.name}}
+									li
+										a(ng-click="setAll('rolelist',true)") select all
+									li
+										a(ng-click="setAll('rolelist',false)") deselect all
+							| &nbsp;{{displayChecked(rolelist)}}
 					.v
 						.v
-							label Skills:
-							.v(ng-repeat="s in skillslist")
-								input(type='checkbox' ng-model="s.checked")
-								label &nbsp;{{s.name}}
-							a(ng-click="setAll('skillslist',true)") select all
-							a(ng-click="setAll('skillslist',false)") deselect all
+							.select_container
+								span Select Skills:
+								ul.select_inner.list-unstyled
+									li(ng-repeat="s in skillslist")
+										input(type='checkbox' ng-model="s.checked")
+										label &nbsp;{{s.name}}
+									li
+										a(ng-click="setAll('skillslist',true)") select all
+									li
+										a(ng-click="setAll('skillslist',false)") deselect all
+							| &nbsp;{{displayChecked(skillslist)}}
 					.v
 						.v
-							label Industry:
-							.v(ng-repeat="i in interestlist")
-								input(type='checkbox' ng-model="i.checked")
-								label &nbsp;{{i.name}}
-							a(ng-click="setAll('interestlist',true)") select all
-							a(ng-click="setAll('interestlist',false)") deselect all
+							.select_container
+								span Select Industries:
+								ul.select_inner.list-unstyled
+									li(ng-repeat="i in interestlist")
+										input(type='checkbox' ng-model="i.checked")
+										label &nbsp;{{i.name}}
+									li
+										a(ng-click="setAll('interestlist',true)") select all
+									li
+										a(ng-click="setAll('interestlist',false)") deselect all
+							| &nbsp;{{displayChecked(interestlist)}}
 					.v
 						.v
 							#sortby_selection.v
