@@ -12,6 +12,7 @@ schema = new Schema
 		provider : {type : String, required : true}
 		id : {type : String, required : true, unique : true}
 		token : {type : String, required : true}
+	events : [Number]
 	location : {type : String}
 	pictureUrl : {type : String}
 	roles : [String]
@@ -28,10 +29,15 @@ schema = new Schema
 
 User = db.model 'User', schema
 
+getEvents = (accessToken, callback)->
+	eventbrite.getEvents accessToken, (err, events)->
+		console.log err if err?
+		callback null, events
+
 exports.upsert = (authProvider, accessToken, profile, callback)-> 
 	condition =  "auth.id" : "#{profile.id}"
-	User.findOne condition, (err, data)->
-		if not data?
+	User.findOne condition, (err, user)->
+		if not user?
 			user = new User
 				auth : 
 					provider : authProvider
@@ -40,42 +46,38 @@ exports.upsert = (authProvider, accessToken, profile, callback)->
 				name : profile.displayName
 				location : profile._json.location?.name
 				pictureUrl : profile._json.pictureUrl
-			user.save (err, data)->
-				console.log err if err?
-				callback null, data
 		else
-			callback null, data
+			user.auth.token = accessToken
+		getEvents accessToken, (err, events)->
+			user.events = events
+			user.save (err, data)->
+				return console.log err if err?	
+				callback null, user
 
 exports.list = (req, res)->
-	user = User.find (err, data)->
+	user = User.find (err, users)->
 		return res.send err if err?
-		return res.send data
+		return res.send users
 
 exports.create = (req, res)->
 	user = new User(req.body)
-	user.save (err, data)->
+	user.save (err, user)->
 		return res.send err if err?
-		return res.send data
+		return res.send user
 
 exports.find = (req, res)->
-	User.findOne {"auth.id" : "#{req.params.authId}"}, (err, data)->
+	User.findOne {"auth.id" : "#{req.params.authId}"}, (err, user)->
 		return res.send err if err?
-		return res.send data
+		return res.send user
 
 exports.update = (req, res)->
 	if not req.user?
 		res.redirect "/linkedin/login"
-	User.update {"auth.id" : "#{req.session.authId}"}, req.body, (err, data)->
+	User.update {"auth.id" : "#{req.session.authId}"}, req.body, (err, user)->
 		return res.send err if err?
 		req.session.complete = true
 		return res.send 200
 
-exports.getEvents = (req, res)->
-	if not req.user?
-		res.redirect "/linkedin/login"
-	eventbrite.getEvents req.session.accessToken, (err, data)->
-		return res.send err if err?
-		return res.send data
 
 
 
