@@ -152,9 +152,7 @@
         transformed_user_profile_data.complete = true;
         return ajax("/user", {
           method: 'put',
-          data: {
-            profile_data: transformed_user_profile_data
-          }
+          data: transformed_user_profile_data
         }, function(data) {
           $scope.session_data.complete = true;
           return $scope.isComplete = true;

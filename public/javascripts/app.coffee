@@ -81,7 +81,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 
 		transformed_user_profile_data.complete = true
 
-		ajax "/user", {method: 'put', data: {profile_data: transformed_user_profile_data}}, (data)->
+		ajax "/user", {method: 'put', data: transformed_user_profile_data}, (data)->
 			$scope.session_data.complete = true
 			$scope.isComplete = true
 
