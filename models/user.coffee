@@ -11,17 +11,18 @@ schema = new Schema
 		provider : {type : String, required : true}
 		id : {type : String, required : true, unique : true}
 		token : {type : String, required : true}
+	location : {type : String}
+	pictureUrl : {type : String}
 	roles : [String]
 	technologies : [String]
 	industries : [String]
 	ideas : [String]
-	location : {type : String}
-	pictureUrl : {type : String}
+	seekingRoles : [String]
+	seekingSkills : [String]
 	pings : 
 		unresponded : [Schema.Types.Objectid]
 		accepted : [Schema.Types.Objectid]
 		rejected : [Schema.Types.Objectid]	
-	available : {type : Boolean, default : true}
 	completed : {type : Boolean}
 
 User = db.model 'User', schema
