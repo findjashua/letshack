@@ -46,7 +46,7 @@ app.use express.static(__dirname + "/public")
 app.get "/", (req, res)->
   res.render('index', { title: 'Express'})
 
-baseUrl = 'http://localhost:3000'
+baseUrl = 'http://hackr-trackr.herokuapp.com'
 
 setSession = (req, accessToken, user)->
   req.session.accessToken = accessToken
