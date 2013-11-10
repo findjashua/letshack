@@ -114,7 +114,7 @@ app.get "/linkedin/logout", (req, res) ->
 user = require './models/user'
 app.get '/user', user.list
 app.post '/user', user.create
-app.get '/user/:name', user.find
+app.get '/user/:authId', user.find
 app.put '/user', user.update
 ###
 app.delete '/user/:name', user.delete
