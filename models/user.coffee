@@ -59,7 +59,7 @@ exports.create = (req, res)->
 		return res.send data
 
 exports.find = (req, res)->
-	User.find {"auth.id" : "#{req.params.authId}"}, (err, data)->
+	User.findOne {"auth.id" : "#{req.params.authId}"}, (err, data)->
 		return res.send err if err?
 		return res.send data
 
