@@ -5,12 +5,6 @@ http = require("http")
 path = require("path")
 stylus = require('stylus')
 
-RedisStore = require("connect-redis")(express)
-redisStore = new RedisStore
-  host: "http://localhost"
-  port: 6379
-  prefix: "sess"
-
 app = express()
 app.set "views", __dirname + "/views"
 app.set "view engine", "jade"
@@ -19,7 +13,6 @@ app.use express.cookieParser()
 app.use express.urlencoded()
 app.use express.json()
 app.use express.session(
-  #store: redisStore
   secret: "keyboard cat"
 )
 app.use passport.initialize()
@@ -28,15 +21,17 @@ app.use express.bodyParser()
 app.use express.methodOverride()
 
 app.use (req, res, next)->
-  user_session = if req.session.id
+  user_session = if req.session.name
     {
       id: req.session.id
       name: req.session.name
       pictureUrl: req.session.pictureUrl
       authId: req.session.authId
+      complete: req.session.complete
     }
   else
     null
+
   res.locals.user_session = user_session
   next()
 
@@ -72,6 +67,7 @@ setSession = (req, accessToken, data)->
   req.session.authId = data.auth.id
   req.session.name = data.name
   req.session.pictureUrl = data.pictureUrl
+  req.session.complete = data.complete?
 
 passport.use new LinkedinStrategy(
   clientID: LINKEDIN_CLIENT_ID
@@ -109,7 +105,8 @@ app.get "/linkedin/auth/callback", passport.authenticate("linkedin",
 app.get "/linkedin/logout", (req, res) ->
   req.logout()
   req.session.destroy()
-  res.redirect "/linkedin/login"
+  console.log "logging out", req.session
+  res.redirect "/"
 
 
 ##############User#################

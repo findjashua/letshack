@@ -2,16 +2,49 @@ extends layout
 
 block extra_header
 	script(type='text/javascript').
-		var session_data = !{JSON.stringify(user_session)};
+		window.session_data = !{JSON.stringify(user_session)};
 block content
 	.container
 		.row
 			.col-xs-12(ng-controller="loginCtrl", ng-cloak=true)
-		.row
-			.col-xs-12(ng-controller='setProfileCtrl', ng-cloak=true)
 		.row(ng-controller="findHackerCtrl", ng-cloak=true)
-			.col-xs-12
-				a(href="/linkedin/auth") Login with LinkedIn
+			#set_profile(ng-hide="isComplete")
+				h2 Complete your profile!
+				#set_profile_inner
+					#set_profile_role
+						h3 Select your roles
+						.inner.v
+							.select_role(ng-repeat="r in rolelist")
+								input(type='checkbox', ng-model='new_user_profile.roles[r.name]')
+								span &nbsp;{{r.name}}
+					#set_looking_for_roles
+						h3 Select which roles you are looking for
+						.inner.v
+							.select_role(ng-repeat="r in rolelist")
+								input(type='checkbox', ng-model='new_user_profile.seeking_roles[r.name]')
+								span &nbsp;{{r.name}}
+					#set_profile_skills
+						h3 Select the technologies or skills you have
+						.inner.v
+							.select_technologies(ng-repeat="s in skillslist")
+								input(type='checkbox', ng-model="new_user_profile.skills[s.name]")
+								span &nbsp;{{s.name}}
+					#set_looking_for_skills
+						h3 Select which skills you are looking for
+						.inner.v
+							.select_technologies(ng-repeat="s in skillslist")
+								input(type='checkbox', ng-model="new_user_profile.seeking_skills[s.name]")
+								span &nbsp;{{s.name}}
+					#set_profile_industry
+						h3 Select industries you are interested in
+						.inner.v
+							.select_industry(ng-repeat="i in interestlist")
+								input(type='checkbox',ng-model="new_user_profile.industries[i.name]")
+								span &nbsp;{{i.name}}
+					.pd
+						a.btn.large.btn-lg.btn-primary(ng-click="submit_profile()") Submit Profile
+
+			.col-xs-12(ng-show="isComplete")
 				#search.1-box
 					.v
 						label name
@@ -36,7 +69,7 @@ block content
 			
 				h1.
 					List of users
-			.col-xs-9
+			.col-xs-9(ng-show="isComplete")
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
 						h2 {{hacker.name}}
@@ -58,7 +91,7 @@ block content
 						.match {{hacker.match}}%
 				#no_hackers(ng-if="!hackers.length")
 					| No hackers found!
-			.col-xs-3(ng-controller="messageCtrl")
+			.col-xs-3(ng-controller="messageCtrl", ng-show="isComplete")
 				#messages
 					.msg.v(ng-repeat="msg in messages track by $index")
 						em {{msg.from}}:

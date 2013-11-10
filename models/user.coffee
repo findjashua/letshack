@@ -28,7 +28,6 @@ User = db.model 'User', schema
 
 setSession = (req, user)->
 
-
 exports.upsert = (authProvider, accessToken, profile, callback)-> 
 	condition =  "auth.id" : "#{profile.id}"
 	User.findOne condition, (err, data)->

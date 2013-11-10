@@ -61,7 +61,7 @@
   });
 
   app.controller('messageCtrl', [
-    '$scope', 'angularFire', '$timeout', function($scope, angularFire, $timeout) {
+    '$scope', 'angularFire', '$timeout', '$http', function($scope, angularFire, $timeout, $http) {
       var ref;
 
       ref = new Firebase(firebase_url + "messages");
@@ -94,12 +94,18 @@
 
   app.controller('loginCtrl', ['$scope', function($scope) {}]);
 
-  app.controller('setProfileCtrl', ['$scope', function($scope) {}]);
-
   app.controller('findHackerCtrl', [
-    '$scope', function($scope) {
+    '$scope', '$window', '$http', function($scope, $window, $http) {
       var ajax, hackers;
 
+      $scope.isComplete = $window.session_data.complete;
+      $scope.new_user_profile = {
+        roles: {},
+        industries: {},
+        skills: {},
+        seeking_roles: {},
+        seeking_skills: {}
+      };
       ajax = function(url, _arg, cb) {
         var data, info, method;
 
@@ -118,11 +124,33 @@
             };
           }
         }
-        return $http(info).success(function(o) {
-          var status;
+        return $http(info).success(function(data) {
+          return cb(data);
+        });
+      };
+      $scope.submit_profile = function() {
+        var k, kk, transformed_user_profile_data, v, vv, _ref;
 
-          status = o[0], data = o[1];
-          return cb(status, data);
+        transformed_user_profile_data = {};
+        _ref = $scope.new_user_profile;
+        for (k in _ref) {
+          v = _ref[k];
+          transformed_user_profile_data[k] = (function() {
+            var _results;
+
+            _results = [];
+            for (kk in v) {
+              vv = v[kk];
+              _results.push(kk);
+            }
+            return _results;
+          })();
+        }
+        return ajax("/user/profile", {
+          method: 'post',
+          data: transformed_user_profile_data
+        }, function(data) {
+          return console.log(data);
         });
       };
       $scope.rolelist = [
@@ -136,7 +164,7 @@
           name: 'designer',
           checked: true
         }, {
-          name: 'hustler',
+          name: 'business',
           checked: true
         }, {
           name: 'mobile',
@@ -161,6 +189,27 @@
           checked: true
         }, {
           name: 'google glasses',
+          checked: true
+        }
+      ];
+      $scope.skillslist = [
+        {
+          name: 'javascript',
+          checked: true
+        }, {
+          name: 'ruby',
+          checked: true
+        }, {
+          name: 'python',
+          checked: true
+        }, {
+          name: 'ios',
+          checked: true
+        }, {
+          name: 'android',
+          checked: true
+        }, {
+          name: 'ruby on rails',
           checked: true
         }
       ];
@@ -266,7 +315,7 @@
           skillsets: {
             mobile: ['ios', 'android']
           },
-          interests: ['google glasses'],
+          layout: ['google glasses'],
           looking_for: ['backend'],
           idea: "I want to build a medical startup as well",
           location: {

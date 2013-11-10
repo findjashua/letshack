@@ -21,7 +21,7 @@ app.filter 'filterByInterest', ->
 		output
 
 
-app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout', ($scope, angularFire, $timeout)->
+app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout','$http', ($scope, angularFire, $timeout, $http)->
 	ref = new Firebase(firebase_url+"messages")
 	$scope.messages = []
 	angularFire(ref.limit(100), $scope, 'messages')
@@ -46,10 +46,19 @@ app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout', ($scope, ang
 app.controller 'loginCtrl', ['$scope', ($scope)->
 ]
 
-app.controller 'setProfileCtrl', ['$scope', ($scope)->
-]
 
-app.controller 'findHackerCtrl', ['$scope', ($scope)->
+app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window, $http)->
+
+	$scope.isComplete = $window.session_data.complete
+
+	$scope.new_user_profile =
+		roles: {}
+		industries: {}
+		skills: {}
+		seeking_roles: {}
+		seeking_skills: {}
+
+
 	ajax = (url, {method, data} , cb)->
 		info = 
 			url: url
@@ -62,15 +71,23 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 				info.data = $.param(data)
 				info.headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
-		$http(info).success (o)->
-			[status, data] = o
-			cb(status, data)
+		$http(info).success (data)->
+			cb(data)
+
+	$scope.submit_profile = ->
+		transformed_user_profile_data = {}
+		for k,v of $scope.new_user_profile
+			transformed_user_profile_data[k] = (kk for kk,vv of v)
+		
+		ajax "/user/profile", {method: 'post', data: transformed_user_profile_data}, (data)->
+			console.log data
+
 
 	$scope.rolelist = [
 		{name: 'frontend', checked:true}
 		{name:'backend', checked: true} 
 		{name:'designer', checked: true}
-		{name:'hustler', checked: true}
+		{name:'business', checked: true}
 		{name:'mobile', checked: true}
 	]
 
@@ -81,6 +98,15 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 		{name: 'advertising', checked: true}
 		{name: 'wearables', checked: true}
 		{name: 'google glasses', checked: true}
+	]
+
+	$scope.skillslist = [
+		{name: 'javascript', checked: true}
+		{name: 'ruby', checked: true}
+		{name: 'python', checked: true}
+		{name: 'ios', checked: true}
+		{name: 'android', checked: true}
+		{name: 'ruby on rails', checked: true}
 	]
 
 	$scope.reverseMatch= true
@@ -153,7 +179,7 @@ app.controller 'findHackerCtrl', ['$scope', ($scope)->
 			roles: ['mobile']
 			skillsets:
 				mobile: ['ios', 'android']
-			interests: ['google glasses']
+			layout: ['google glasses']
 			looking_for: ['backend']
 			idea: "I want to build a medical startup as well"
 			location:
