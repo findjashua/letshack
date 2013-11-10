@@ -27,8 +27,6 @@ schema = new Schema
 
 User = db.model 'User', schema
 
-setSession = (req, user)->
-
 exports.upsert = (authProvider, accessToken, profile, callback)-> 
 	condition =  "auth.id" : "#{profile.id}"
 	User.findOne condition, (err, data)->
@@ -39,7 +37,7 @@ exports.upsert = (authProvider, accessToken, profile, callback)->
 					id : profile.id
 					token : accessToken
 				name : profile.displayName
-				location : profile._json.location.name
+				location : profile._json.location?.name
 				pictureUrl : profile._json.pictureUrl
 			user.save (err, data)->
 				console.log err if err?

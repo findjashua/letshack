@@ -12,9 +12,7 @@ app.use express.logger()
 app.use express.cookieParser()
 app.use express.urlencoded()
 app.use express.json()
-app.use express.session(
-  secret: "keyboard cat"
-)
+app.use express.session(secret: "keyboard cat")
 app.use passport.initialize()
 app.use passport.session()
 app.use express.bodyParser()
@@ -48,18 +46,7 @@ app.use express.static(__dirname + "/public")
 app.get "/", (req, res)->
   res.render('index', { title: 'Express'})
 
-###############LinkedIn#################
-
-linkedin = require("passport-linkedin-oauth2")
-LinkedinStrategy = linkedin.Strategy
-LINKEDIN_CLIENT_ID = "75agqd2lrg9ozy"
-LINKEDIN_CLIENT_SECRET = "0c1wXQ6vuAfoTN9Z"
-
-passport.serializeUser (user, done) ->
-  done null, user
-
-passport.deserializeUser (obj, done) ->
-  done null, obj
+baseUrl = 'http://localhost:3000'
 
 setSession = (req, accessToken, data)->
   req.session.accessToken = accessToken
@@ -69,20 +56,36 @@ setSession = (req, accessToken, data)->
   req.session.pictureUrl = data.pictureUrl
   req.session.complete = data.complete?
 
+ensureAuthenticated = (req, res, next) ->
+  return next()  if req.isAuthenticated()
+  res.redirect "/"
+
+###############Passport#################
+
+passport.serializeUser (user, done) ->
+  done null, user
+
+passport.deserializeUser (obj, done) ->
+  done null, obj
+
+###############LinkedIn#################
+###
+linkedin = require 'passport-linkedin-oauth2'
+LinkedinStrategy = linkedin.Strategy
+LINKEDIN_CLIENT_ID = "75agqd2lrg9ozy"
+LINKEDIN_CLIENT_SECRET = "0c1wXQ6vuAfoTN9Z"
+
 passport.use new LinkedinStrategy(
   clientID: LINKEDIN_CLIENT_ID
   clientSecret: LINKEDIN_CLIENT_SECRET
-  callbackURL: "http://localhost:3000/linkedin/auth/callback"
+  callbackURL: "#{baseUrl}/linkedin/auth/callback"
   passReqToCallback: true
 , (req, accessToken, refreshToken, profile, done) ->
     require("./models/user").upsert 'linkedin', accessToken, profile, (err, data)->
+      console.log err if err?
       setSession req, accessToken, data
       done null, profile
 )
-
-ensureAuthenticated = (req, res, next) ->
-  return next()  if req.isAuthenticated()
-  res.redirect "/linkedin/login"
 
 app.get "/linkedin/login", (req, res) ->
   user = req.user
@@ -108,6 +111,51 @@ app.get "/linkedin/logout", (req, res) ->
   console.log "logging out", req.session
   res.redirect "/"
 
+###
+#############Eventbrite############
+
+eventbrite= require 'passport-eventbrite-oauth'
+EventbriteStrategy = eventbrite.OAuth2Strategy
+EVENTBRITE_CLIENT_ID = 'RWMYVZPMC36BPJXMV2'
+EVENTBRITE_CLIENT_SECRET = 'KCI5LM3WL3HJNDOD4EA4E3NHJ4P5BQYFMQDUUG46PSGC2YF7QU'
+
+passport.use new EventbriteStrategy(
+  clientID: EVENTBRITE_CLIENT_ID
+  clientSecret: EVENTBRITE_CLIENT_SECRET
+  callbackURL: "#{baseUrl}/eventbrite/auth/callback"
+  passReqToCallback: true
+  ,
+  (req, accessToken, refreshToken, profile, done)->
+    require("./models/user").upsert 'eventbrite', accessToken, profile, (err, data)->
+      console.log err if err?
+      setSession req, accessToken, data
+      done null, profile
+)
+
+app.get "/eventbrite/login", (req, res) ->
+  user = req.user
+  return res.send user if user?
+  res.send '<a href="/eventbrite/auth">Login with Eventbrite</a>'
+
+app.get "/eventbrite/account", ensureAuthenticated, (req, res) ->
+  res.send req.user
+
+
+app.get "/eventbrite/auth", passport.authenticate("eventbrite",
+  state: "SOME STATE"
+), (req, res) ->
+
+app.get "/eventbrite/auth/callback", passport.authenticate("eventbrite",
+  failureRedirect: "/eventbrite/login"
+), (req, res) ->
+  res.redirect "/"
+
+app.get "/eventbrite/logout", (req, res) ->
+  req.logout()
+  req.session.destroy()
+  console.log "logging out", req.session
+  res.redirect "/"
+
 
 ##############User#################
 
@@ -119,7 +167,6 @@ app.put '/user', user.update
 ###
 app.delete '/user/:name', user.delete
 ###
-
 
 http = require("http")
 http.createServer(app).listen 3000
