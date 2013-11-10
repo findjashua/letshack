@@ -18,7 +18,12 @@ html(ng-app='hackerApp')
     script(type='text/javascript', src='/javascripts/app.js')
   body
     nav.navbar.navbar-default(role='navigation')
-        .navbar-header
+        .container
+            .navbar-header
+                a.navbar-brand(href='#') Hacker Trackr
+            ul.nav.navbar-nav.navbar-right
+                li
+                    a Logout
     #content
         block content
     #footer
