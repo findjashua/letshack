@@ -113,7 +113,7 @@ block content
 								a.btn.btn-default(ng-click="sortBy('bestMatch')", ng-class="{sel: sortby=='bestMatch'}") Best match
 			
 				h1.
-					List of users
+					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
 			.col-xs-9(ng-show="isComplete")
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")

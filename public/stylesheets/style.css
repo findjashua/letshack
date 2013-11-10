@@ -132,11 +132,17 @@ a:hover {
 }
 .select_container .select_inner li {
   padding: 3px;
+  border-bottom: 1px solid #aaa;
+}
+.select_container .select_inner li input[type=checkbox] {
   cursor: pointer;
 }
 .select_container .select_inner li.sel {
-  background-color: #88f;
+  background-color: #6ba3ed;
   color: #fff;
+}
+.select_container .select_inner li.last-child {
+  border: none;
 }
 #sortby_selection a.sel {
   background-color: #ddd;
