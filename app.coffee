@@ -48,13 +48,13 @@ app.get "/", (req, res)->
 
 baseUrl = 'http://localhost:3000'
 
-setSession = (req, accessToken, data)->
+setSession = (req, accessToken, user)->
   req.session.accessToken = accessToken
-  req.session.uid = data._id.str
-  req.session.authId = data.auth.id
-  req.session.name = data.name
-  req.session.pictureUrl = data.pictureUrl
-  req.session.complete = data.complete?
+  req.session.uid = user._id.str
+  req.session.authId = user.auth.id
+  req.session.name = user.name
+  req.session.pictureUrl = user.pictureUrl
+  req.session.complete = user.complete?
 
 ensureAuthenticated = (req, res, next) ->
   return next()  if req.isAuthenticated()
@@ -126,9 +126,9 @@ passport.use new EventbriteStrategy(
   passReqToCallback: true
   ,
   (req, accessToken, refreshToken, profile, done)->
-    require("./models/user").upsert 'eventbrite', accessToken, profile, (err, data)->
+    require("./models/user").upsert 'eventbrite', accessToken, profile, (err, user)->
       console.log err if err?
-      setSession req, accessToken, data
+      setSession req, accessToken, user
       done null, profile
 )
 
@@ -164,7 +164,7 @@ app.get '/user', user.list
 app.post '/user', user.create
 app.get '/user/:authId', user.find
 app.put '/user', user.update
-app.get '/getEvents', user.getEvents
+#app.get '/getEvents', user.getEvents
 ###
 app.delete '/user/:name', user.delete
 ###
