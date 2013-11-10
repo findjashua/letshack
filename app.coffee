@@ -8,7 +8,7 @@ stylus = require('stylus')
 RedisStore = require("connect-redis")(express)
 redisStore = new RedisStore
   host: "http://localhost"
-  port: 3000
+  port: 6379
   prefix: "sess"
 
 app = express()

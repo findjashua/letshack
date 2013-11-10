@@ -11,12 +11,12 @@ schema = new Schema
 		provider : {type : String, required : true}
 		id : {type : String, required : true, unique : true}
 		token : {type : String, required : true}
-	skills : [String]
+	roles : [String]
 	technologies : [String]
 	industries : [String]
 	ideas : [String]
 	location : {type : String}
-	pokes : 
+	pings : 
 		unresponded : [Schema.Types.Objectid]
 		accepted : [Schema.Types.Objectid]
 		rejected : [Schema.Types.Objectid]	
