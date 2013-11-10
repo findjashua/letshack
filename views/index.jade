@@ -64,10 +64,20 @@ block content
 								label.label.label-success(ng-repeat="role in you.roles")
 									| {{role}}
 						h3 
-							| looking for 
+							| Looking for 
 							span.v
 								label.label.label-danger(ng-repeat="sr in you.seeking_roles")
 									| {{sr}}
+						h4
+							| Skills&nbsp;
+							span.v
+								label.label.label-info(ng-repeat="s in you.skills")
+									| {{s}}
+						h4
+							| Looking for skills: &nbsp;
+							span.v
+								label.label.label-warning(ng-repeat="ss in you.seeking_skills")
+									| {{ss}}
 						h4 interested in {{you.industries.join(', ')}}		
 						p {{you.ideas[0]}}
 				#search.1-box
@@ -118,9 +128,10 @@ block content
 									option(value="you_want_them") Best candidates
 									option(value="they_want_you") Most desired by
 									option(value="match_score") Best match
-				h1.
-					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
+
 			.col-xs-9(ng-show="isComplete && hackers_loaded")
+				h3.art
+					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:[orderType] | limitTo: 20", ng-animate="'hacker'")
 						h2
