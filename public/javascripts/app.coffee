@@ -55,11 +55,9 @@ app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout','$http', ($sc
 	, 1000
 ]
 
-app.controller 'loginCtrl', ['$scope', ($scope)->
-]
-
 app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window, $http)->
 
+	$scope.hackers_loaded = false
 	$scope.session_data = $window.session_data
 	$scope.isComplete = $window.session_data && $window.session_data.complete
 
@@ -179,6 +177,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 					u.scores = score
 					hackers.push u
 			$scope.hackers = hackers
+			$scope.hackers_loaded = true
 
 	$scope.initHackers = (hackers)->
 		$scope.hackers = hackers

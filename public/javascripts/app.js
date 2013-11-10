@@ -125,12 +125,11 @@
     }
   ]);
 
-  app.controller('loginCtrl', ['$scope', function($scope) {}]);
-
   app.controller('findHackerCtrl', [
     '$scope', '$window', '$http', function($scope, $window, $http) {
       var ajax;
 
+      $scope.hackers_loaded = false;
       $scope.session_data = $window.session_data;
       $scope.isComplete = $window.session_data && $window.session_data.complete;
       $scope.new_user_idea = '';
@@ -330,7 +329,8 @@
               hackers.push(u);
             }
           }
-          return $scope.hackers = hackers;
+          $scope.hackers = hackers;
+          return $scope.hackers_loaded = true;
         });
       };
       $scope.initHackers = function(hackers) {

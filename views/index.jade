@@ -6,7 +6,7 @@ block extra_header
 block content
 	.container(ng-controller="findHackerCtrl", ng-cloak=true)
 		.row(ng-hide="session_data")
-			.col-xs-12(ng-controller="loginCtrl", ng-cloak=true)
+			.col-xs-12(ng-cloak=true)
 				a.btn.btn-lg.btn-danger(href="/eventbrite/auth") Login with EventBrite
 		.row(ng-show="session_data")
 			#set_profile(ng-hide="isComplete")
@@ -108,7 +108,7 @@ block content
 									option(value="match_score") Best match
 				h1.
 					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
-			.col-xs-9(ng-show="isComplete")
+			.col-xs-9(ng-show="isComplete && hackers_loaded")
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:[orderType] | limitTo: 20", ng-animate="'hacker'")
 						h2
