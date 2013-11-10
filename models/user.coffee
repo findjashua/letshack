@@ -6,13 +6,19 @@ db = mongoose.createConnection url
 
 Schema = mongoose.Schema
 
-schema = new Schema
+eventSchema = new Schema
+	id : {type : Number}
+	title : {type : String}
+	start_date : {type : Date}
+	end_date : {type : Date}
+
+userSchema = new Schema
 	name : {type : String}
 	auth : 
 		provider : {type : String, required : true}
 		id : {type : String, required : true, unique : true}
 		token : {type : String, required : true}
-	events : [Number]
+	events : [eventSchema]
 	location : {type : String}
 	pictureUrl : {type : String}
 	roles : [String]
@@ -27,7 +33,7 @@ schema = new Schema
 		rejected : [Schema.Types.Objectid]	
 	complete : {type : Boolean}
 
-User = db.model 'User', schema
+User = db.model 'User', userSchema
 
 getEvents = (accessToken, callback)->
 	eventbrite.getEvents accessToken, (err, events)->
@@ -49,6 +55,7 @@ exports.upsert = (authProvider, accessToken, profile, callback)->
 		else
 			user.auth.token = accessToken
 		getEvents accessToken, (err, events)->
+			console.log events
 			user.events = events
 			user.save (err, data)->
 				return console.log err if err?	

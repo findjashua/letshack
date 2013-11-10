@@ -11,7 +11,14 @@ exports.getEvents = (accessToken, callback)->
 		data = []
 		orders = obj.user_tickets[1].orders
 		for order in orders
-			data.push order.order.event.id
+			event = order.order.event
+			console.log (k for k,v of event)
+			data.push 
+				id : event.id
+				title : event.title
+				start_date : new Date event.start_date
+				end_date : new Date event.end_date
+			console.log data
 		callback null, data
 
 
