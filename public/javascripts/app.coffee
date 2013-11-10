@@ -28,8 +28,10 @@ app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout', ($scope, ang
 	$scope.addMessage = (e)->
 		return if e.keyCode!=13
 		$scope.messages.push {from: 'anonymous', msg: $scope.msg}
-		$scope.scrollBottom()
 		$scope.msg = ''
+		$timeout ->
+			$scope.scrollBottom()
+		, 250
 	
 	$scope.scrollBottom = ->
 		scrollDiv = document.getElementById 'messages'

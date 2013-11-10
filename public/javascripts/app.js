@@ -75,8 +75,10 @@
           from: 'anonymous',
           msg: $scope.msg
         });
-        $scope.scrollBottom();
-        return $scope.msg = '';
+        $scope.msg = '';
+        return $timeout(function() {
+          return $scope.scrollBottom();
+        }, 250);
       };
       $scope.scrollBottom = function() {
         var scrollDiv;
