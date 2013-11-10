@@ -80,6 +80,8 @@
     }
   ]);
 
+  app.controller('loginCtrl', ['$scope', function($scope) {}]);
+
   app.controller('setProfileCtrl', ['$scope', function($scope) {}]);
 
   app.controller('findHackerCtrl', [

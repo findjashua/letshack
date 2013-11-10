@@ -1,12 +1,14 @@
 extends layout
 
 block content
-<<<<<<< HEAD
 	.pure-g
+		.pure-u-3-3(ng-controller="loginCtrl")
+					
 		.pure-u-3-3(ng-controller='setProfileCtrl')
 
 		.pure-u-2-3(ng-controller="findHackerCtrl")
 			.pd-1
+				a(href="/linkedin/auth") Login with LinkedIn
 				#search.1-box
 					.v
 						label Any
@@ -57,7 +59,3 @@ block content
 						em {{msg.from}}:
 						p {{msg.msg}}
 				input(type='text', ng-model='msg', ng-keydown='addMessage($event)' placeholder='Say something here!')
-=======
-  h1= title
-  p Welcome to #{title}
->>>>>>> init

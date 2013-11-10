@@ -30,6 +30,9 @@ app.controller 'messageCtrl', ['$scope', 'angularFire', ($scope, angularFire)->
 		$scope.msg = ''
 ]
 
+app.controller 'loginCtrl', ['$scope', ($scope)->
+]
+
 app.controller 'setProfileCtrl', ['$scope', ($scope)->
 ]
 

@@ -1,47 +1,15 @@
-<<<<<<< HEAD
-
-###
-Module dependencies.
-###
-express = require("express")
-routes = require("./routes")
-user = require("./routes/user")
-http = require("http")
-path = require("path")
-stylus = require('stylus')
-
-
-app = express()
-
-# all environments
-app.set "port", process.env.PORT or 3000
-app.set "views", __dirname + "/views"
-app.set "view engine", "jade"
-app.use express.favicon()
-app.use express.logger("dev")
-app.use express.bodyParser()
-app.use express.methodOverride()
-app.use app.router
-app.use stylus.middleware(
-	src: __dirname + '/views'
-	dest: __dirname + '/public'
-)
-
-app.use express.static(path.join(__dirname, "public"))
-
-# development only
-app.use express.errorHandler()  if "development" is app.get("env")
-app.get "/", routes.index
-app.get "/users", user.list
-http.createServer(app).listen app.get("port"), ->
-	console.log "Express server listening on port " + app.get("port")
-=======
 ensureAuthenticated = (req, res, next) ->
   return next()  if req.isAuthenticated()
   res.redirect "/login"
 express = require("express")
 passport = require("passport")
 linkedin = require("passport-linkedin-oauth2")
+routes = require("./routes")
+user = require("./routes/user")
+http = require("http")
+path = require("path")
+stylus = require('stylus')
+
 LinkedinStrategy = linkedin.Strategy
 LINKEDIN_CLIENT_ID = "75agqd2lrg9ozy"
 LINKEDIN_CLIENT_SECRET = "0c1wXQ6vuAfoTN9Z"
@@ -75,10 +43,14 @@ app.use passport.session()
 app.use express.bodyParser()
 app.use express.methodOverride()
 app.use app.router
+app.use stylus.middleware(
+	src: __dirname + '/views'
+	dest: __dirname + '/public'
+)
 app.use express.static(__dirname + "/public")
 
 app.get "/", (req, res)->
-  res.send 'server running'
+  res.render('index', { title: 'Express' })
 
 app.get "/linkedin/login", (req, res) ->
   user = req.user
@@ -105,4 +77,3 @@ app.get "/linkedin/logout", (req, res) ->
 
 http = require("http")
 http.createServer(app).listen 3000
->>>>>>> init
