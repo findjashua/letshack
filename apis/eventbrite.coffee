@@ -1,7 +1,14 @@
 request = require 'request'
+development = process.env.APP_ENV='development'
+
 BASE_URL = 'https://www.eventbrite.com/json'
-APP_KEY = 'RWMYVZPMC36BPJXMV2'
-USER_KEY = '131440656219123672419'
+APP_KEY = if development then 'TQ5TRFYAZSDUVIHID6' else 'RWMYVZPMC36BPJXMV2'
+USER_KEY = if development then '12529654882123192526' else '131440656219123672419'
+
+console.log "USING EVENT BRITE DEVLEOPMENT"
+console.log APP_KEY, USER_KEY
+
+
 #https://www.eventbrite.com/json/user_list_tickets?app_key=RWMYVZPMC36BPJXMV2&user_key=131440656219123672419&access_token=
 exports.getEvents = (accessToken, callback)->
 	url = "#{BASE_URL}/user_list_tickets?app_key=#{APP_KEY}&user_key=#{USER_KEY}&access_token=#{accessToken}"
