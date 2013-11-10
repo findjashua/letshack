@@ -42,6 +42,10 @@ block content
 							.select_industry(ng-repeat="i in interestlist")
 								input(type='checkbox',ng-model="new_user_profile.industries[i.name]")
 								span &nbsp;{{i.name}}
+					#set_profile_idea
+						h3 What is an idea or a current project you are working on?
+						.inner.v
+							textarea(style="width:400px;height:150px",ng-model="new_user_idea", placeholder="Type your idea here")
 					.pd
 						a.btn.large.btn-lg.btn-primary(ng-click="submit_profile()") Submit Profile
 
@@ -51,7 +55,7 @@ block content
 					h2 {{you.name}} ({{you.roles.join(', ')}})
 					h3 looking for {{you.seeking_roles.join(', ')}}
 					h4 interested in {{you.industries.join(', ')}}		
-
+					p {{you.ideas[0]}}
 				#search.1-box
 					.v
 						label name

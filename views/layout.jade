@@ -21,19 +21,17 @@ html(ng-app='hackerApp')
     nav.navbar.navbar-default(role='navigation')
         .container
             .navbar-header
-                a.navbar-brand(href='#') Hacker Trackr
+                a.navbar-brand(href='/') Hacker Trackr
             ul.nav.navbar-nav.navbar-right
                 if (user_session)
                     li
                         a(href='#')
-                            span Logged in as&nbsp;
                             if user_session.pictureUrl
                                 img(style="width:30px;height:30px" src=user_session.pictureUrl)
-
-                            span &nbsp; #{user_session.name}
-                            span &nbsp;
+                            | &nbsp;#{user_session.name}
                     li
-                        a(href="/linkedin/logout") Logout
+                        a(href="/linkedin/logout") 
+                            span Logout
     #content
         block content
     #footer

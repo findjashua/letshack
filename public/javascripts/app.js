@@ -100,6 +100,7 @@
 
       $scope.session_data = $window.session_data;
       $scope.isComplete = $window.session_data && $window.session_data.complete;
+      $scope.new_user_idea = '';
       $scope.new_user_profile = {
         roles: {},
         industries: {},
@@ -149,6 +150,7 @@
             return _results;
           })();
         }
+        transformed_user_profile_data.ideas = [$scope.new_user_idea];
         transformed_user_profile_data.complete = true;
         return ajax("/user", {
           method: 'put',

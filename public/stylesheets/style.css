@@ -46,7 +46,7 @@ a:hover {
   margin-right: 0;
 }
 #messages {
-  max-height: 500px;
+  max-height: 300px;
   padding: 3px;
   background-color: #ccc;
   overflow-y: scroll;
