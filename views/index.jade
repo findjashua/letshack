@@ -7,7 +7,7 @@ block content
 	.container(ng-controller="findHackerCtrl", ng-cloak=true)
 		.row(ng-hide="session_data")
 			.col-xs-12(ng-controller="loginCtrl", ng-cloak=true)
-				a.btn.btn-lg.btn-danger(href="/linkedin/auth") Login with LinkedIn
+				a.btn.btn-lg.btn-danger(href="/eventbrite/auth") Login with EventBrite
 		.row(ng-show="session_data")
 			#set_profile(ng-hide="isComplete")
 				h2 Complete your profile!
@@ -51,11 +51,13 @@ block content
 
 			.col-xs-12(ng-show="isComplete")
 				#your_info(ng-show="you")
-					img(ng-src="{{you.pictureUrl}}")
-					h2 {{you.name}} ({{you.roles.join(', ')}})
-					h3 looking for {{you.seeking_roles.join(', ')}}
-					h4 interested in {{you.industries.join(', ')}}		
-					p {{you.ideas[0]}}
+					.lt(ng-show="you.pictureUrl")
+						img(ng-src="{{you.pictureUrl}}")
+					.rt
+						h2 {{you.name}} ({{you.roles.join(', ')}})
+						h3 looking for {{you.seeking_roles.join(', ')}}
+						h4 interested in {{you.industries.join(', ')}}		
+						p {{you.ideas[0]}}
 				#search.1-box
 					.v
 						label name
@@ -65,24 +67,41 @@ block content
 						input(ng-model="search.idea")
 					.v
 						.v
+							label Roles:
 							.v(ng-repeat="rl in rolelist")
-								label {{rl.name}}
 								input(type="checkbox" ng-model="rl.checked")
-							a(ng-click="setAllRole(true)") select all
-							a(ng-click="setAllRole(false)") deselect all
+								label &nbsp;{{rl.name}}
+							a(ng-click="setAll('rolelist',true)") select all
+							a(ng-click="setAll('rolelist',false)") deselect all
 					.v
 						.v
+							label Skills:
+							.v(ng-repeat="s in skillslist")
+								input(type='checkbox' ng-model="s.checked")
+								label &nbsp;{{s.name}}
+							a(ng-click="setAll('skillslist',true)") select all
+							a(ng-click="setAll('skillslist',false)") deselect all
+					.v
+						.v
+							label Industry:
 							.v(ng-repeat="i in interestlist")
-								label {{i.name}}
 								input(type='checkbox' ng-model="i.checked")
-							a(ng-click="setAllInterest(true)") select all
-							a(ng-click="setAllInterest(false)") deselect all
+								label &nbsp;{{i.name}}
+							a(ng-click="setAll('interestlist',true)") select all
+							a(ng-click="setAll('interestlist',false)") deselect all
+					.v
+						.v
+							#sortby_selection.v
+								label Sort by: 
+								a.btn.btn-default(ng-click="sortBy('bestCandidate')", ng-class="{sel: sortby=='bestCandidate'}") Best candidates
+								a.btn.btn-default(ng-click="sortBy('desiredBy')", ng-class="{sel: sortby=='desiredBy'}") Most desired by
+								a.btn.btn-default(ng-click="sortBy('bestMatch')", ng-class="{sel: sortby=='bestMatch'}") Best match
 			
 				h1.
 					List of users
 			.col-xs-9(ng-show="isComplete")
 				#hackers(ng-if="hackers.length")
-					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
+					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:['-match'] | limitTo: 20", ng-animate="'hacker'")
 						h2 {{hacker.name}}
 						.skills.vv(ng-repeat="role in hacker.roles")
 							h3.skill
@@ -106,5 +125,5 @@ block content
 				#messages
 					.msg.v(ng-repeat="msg in messages track by $index")
 						em {{msg.from}}:
-						p {{msg.msg}}
+						span {{msg.msg}}
 				input(type='text', ng-model='msg', ng-keydown='addMessage($event)' placeholder='Say something here!')

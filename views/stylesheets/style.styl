@@ -5,6 +5,9 @@ body
 	background-color: white
 	font: 12px Helvetica, Arial, sans-serif
 
+input[type=checkbox]
+	margin: 0
+	padding: 0
 a
 	color: blue
 	&:hover
@@ -38,6 +41,18 @@ a
 		margin-right: 5px
 		&:last-child
 			margin-right: 0
+
+#your_info
+	display: inline-block
+	.lt, .rt
+		float: left
+	.lt
+		width: 100px
+	.rt
+		width: 700px
+		h2
+			margin-top: 0
+
 
 #messages
 	max-height: 300px
@@ -76,3 +91,8 @@ a
 .hacker-leave-setup.hacker-leave-start
 	opacity: 0
 	line-height: 0
+
+#sortby_selection
+	a
+		&.sel
+			background-color: #ddd

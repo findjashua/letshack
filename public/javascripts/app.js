@@ -60,6 +60,33 @@
     };
   });
 
+  app.filter('filterBySkills', function() {
+    return function(input, skillslist) {
+      var checked, i, output, _i, _len;
+
+      output = [];
+      checked = (function() {
+        var _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = skillslist.length; _i < _len; _i++) {
+          i = skillslist[_i];
+          if (i.checked) {
+            _results.push(i.name);
+          }
+        }
+        return _results;
+      })();
+      for (_i = 0, _len = input.length; _i < _len; _i++) {
+        i = input[_i];
+        if (_.intersection(checked, i.skills).length) {
+          output.push(i);
+        }
+      }
+      return output;
+    };
+  });
+
   app.controller('messageCtrl', [
     '$scope', 'angularFire', '$timeout', '$http', function($scope, angularFire, $timeout, $http) {
       var ref;
@@ -211,6 +238,9 @@
           name: 'ruby',
           checked: true
         }, {
+          name: 'nodejs',
+          checked: true
+        }, {
           name: 'python',
           checked: true
         }, {
@@ -218,6 +248,9 @@
           checked: true
         }, {
           name: 'android',
+          checked: true
+        }, {
+          name: 'pitching',
           checked: true
         }, {
           name: 'ruby on rails',
@@ -233,25 +266,14 @@
           return cb(data);
         });
       };
-      $scope.setAllInterest = function(param) {
+      $scope.setAll = function(field, param) {
         var i, _i, _len, _ref, _results;
 
-        _ref = $scope.interestlist;
+        _ref = $scope[field];
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
           _results.push(i.checked = param);
-        }
-        return _results;
-      };
-      $scope.setAllRole = function(param) {
-        var r, _i, _len, _ref, _results;
-
-        _ref = $scope.rolelist;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          r = _ref[_i];
-          _results.push(r.checked = param);
         }
         return _results;
       };
@@ -307,9 +329,7 @@
           id: 1,
           name: 'Phil',
           roles: ['backend'],
-          skillsets: {
-            backend: ['ruby', 'node']
-          },
+          skills: ['ruby', 'node'],
           interests: ['healthcare', 'social media'],
           looking_for: ['frontend', 'designer'],
           idea: "I want to build a medical startup",
@@ -319,9 +339,7 @@
           id: 2,
           name: 'Eve',
           roles: ['business'],
-          skillsets: {
-            business: ['excel']
-          },
+          skills: ['pitching'],
           interests: ['wearables'],
           looking_for: ['frontend', 'backend', 'designer'],
           idea: "I want to build a dog food startup",
@@ -330,9 +348,7 @@
           id: 3,
           name: 'Omar',
           roles: ['mobile'],
-          skillsets: {
-            mobile: ['ios', 'android']
-          },
+          skills: ['ios', 'android'],
           interests: ['google glasses'],
           looking_for: ['backend'],
           idea: "I want to build a medical startup as well",
@@ -345,9 +361,7 @@
           id: 4,
           name: 'Jashua',
           roles: ['backend'],
-          skillsets: {
-            mobile: ['node', 'ruby on rails']
-          },
+          skills: ['node', 'ruby on rails'],
           interests: ['advertising'],
           looking_for: ['frontend'],
           idea: "I want to build a linkedin bluetooth app",

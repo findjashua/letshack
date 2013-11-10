@@ -6,6 +6,10 @@ body {
   background-color: #fff;
   font: 12px Helvetica, Arial, sans-serif;
 }
+input[type=checkbox] {
+  margin: 0;
+  padding: 0;
+}
 a {
   color: #00f;
 }
@@ -45,6 +49,22 @@ a:hover {
 .v > *:last-child {
   margin-right: 0;
 }
+#your_info {
+  display: inline-block;
+}
+#your_info .lt,
+#your_info .rt {
+  float: left;
+}
+#your_info .lt {
+  width: 100px;
+}
+#your_info .rt {
+  width: 700px;
+}
+#your_info .rt h2 {
+  margin-top: 0;
+}
 #messages {
   max-height: 300px;
   padding: 3px;
@@ -83,4 +103,7 @@ a:hover {
 .hacker-leave-setup.hacker-leave-start {
   opacity: 0;
   line-height: 0;
+}
+#sortby_selection a.sel {
+  background-color: #ddd;
 }

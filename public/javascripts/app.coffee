@@ -20,6 +20,14 @@ app.filter 'filterByInterest', ->
 				output.push i
 		output
 
+app.filter 'filterBySkills', ->
+	(input, skillslist)->
+		output = []
+		checked = (i.name for i in skillslist when i.checked)
+		for i in input
+			if _.intersection(checked, i.skills).length
+				output.push i
+		output
 
 app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout','$http', ($scope, angularFire, $timeout, $http)->
 	ref = new Firebase(firebase_url+"messages")
@@ -109,9 +117,11 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 	$scope.skillslist = [
 		{name: 'javascript', checked: true}
 		{name: 'ruby', checked: true}
+		{name: 'nodejs', checked: true}
 		{name: 'python', checked: true}
 		{name: 'ios', checked: true}
 		{name: 'android', checked: true}
+		{name: 'pitching', checked: true}
 		{name: 'ruby on rails', checked: true}
 	]
 
@@ -125,13 +135,9 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			$scope.users_data[authId.toString()] = data
 			cb(data)
 
-	$scope.setAllInterest = (param)->
-		for i in $scope.interestlist
+	$scope.setAll = (field, param)->
+		for i in $scope[field]
 			i.checked = param
-
-	$scope.setAllRole = (param)->
-		for r in $scope.rolelist
-			r.checked = param
 
 	$scope.initLocation = (h)->
 		ll = new google.maps.LatLng(h.location.lat, h.location.long)
@@ -167,8 +173,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			id: 1
 			name: 'Phil'
 			roles: ['backend']
-			skillsets:
-				backend: ['ruby', 'node']
+			skills: ['ruby', 'node']
 			interests: ['healthcare', 'social media']
 			looking_for: ['frontend', 'designer']
 			idea: "I want to build a medical startup"
@@ -179,8 +184,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			id: 2
 			name: 'Eve'
 			roles: ['business']
-			skillsets:
-				business: ['excel']
+			skills: ['pitching']
 			interests: ['wearables']
 			looking_for: ['frontend', 'backend', 'designer']
 			idea: "I want to build a dog food startup"
@@ -190,8 +194,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			id: 3
 			name: 'Omar'
 			roles: ['mobile']
-			skillsets:
-				mobile: ['ios', 'android']
+			skills: ['ios', 'android']
 			interests: ['google glasses']
 			looking_for: ['backend']
 			idea: "I want to build a medical startup as well"
@@ -204,8 +207,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			id: 4
 			name: 'Jashua'
 			roles: ['backend']
-			skillsets:
-				mobile: ['node', 'ruby on rails']
+			skills: ['node', 'ruby on rails']
 			interests: ['advertising']
 			looking_for: ['frontend']
 			idea: "I want to build a linkedin bluetooth app"
