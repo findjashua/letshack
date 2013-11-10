@@ -25,16 +25,19 @@ schema = new Schema
 
 User = db.model 'User', schema
 
-exports.upsert = (authProvider, accessToken, profile)->
-	user = new User
-		auth : 
-			provider : authProvider
-			id : profile.id
-			token : accessToken
-		name : profile.displayName
-		location : profile._json.location.name
-	user.save (err, data)->
-		console.log err if err?
+exports.upsert = (authProvider, accessToken, profile)-> 
+	condition =  "auth.id" : "#{profile.id}"
+	User.count condition, (err, data)->
+		if data is 0
+			user = new User
+				auth : 
+					provider : authProvider
+					id : profile.id
+					token : accessToken
+				name : profile.displayName
+				location : profile._json.location.name
+			user.save (err, data)->
+				console.log err if err?
 
 exports.list = (req, res)->
 	user = User.find (err, data)->
