@@ -7,7 +7,11 @@ block content
 	.container(ng-controller="findHackerCtrl", ng-cloak=true)
 		.row(ng-hide="session_data")
 			.col-xs-12(ng-cloak=true)
-				a.btn.btn-lg.btn-danger(href="/eventbrite/auth") Login with EventBrite
+				.jumbotron
+					h1 Hacker Trackr
+					p Lorem ipsum
+					p.art
+						a.btn.btn-lg.btn-danger(href="/eventbrite/auth") Login with EventBrite
 		.row(ng-show="session_data")
 			#set_profile(ng-hide="isComplete")
 				h2 Complete your profile!
@@ -54,8 +58,16 @@ block content
 					.lt(ng-show="you.pictureUrl")
 						img(ng-src="{{you.pictureUrl}}")
 					.rt
-						h2 {{you.name}} ({{you.roles.join(', ')}})
-						h3 looking for {{you.seeking_roles.join(', ')}}
+						h2 
+							| {{you.name}} 
+							span.v
+								label.label.label-success(ng-repeat="role in you.roles")
+									| {{role}}
+						h3 
+							| looking for 
+							span.v
+								label.label.label-danger(ng-repeat="sr in you.seeking_roles")
+									| {{sr}}
 						h4 interested in {{you.industries.join(', ')}}		
 						p {{you.ideas[0]}}
 				#search.1-box
@@ -112,20 +124,33 @@ block content
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:[orderType] | limitTo: 20", ng-animate="'hacker'")
 						h2
-							| {{hacker.name}}
-							span.smaller ({{hacker.roles.join(', ')}})
-						.skills.vv
-							.skill(ng-show='hacker.skills.length') ({{hacker.skills.join(', ')}})
+							| {{hacker.name}}&nbsp;
+							span.smaller.v
+								label.label.label-success(ng-repeat="role in hacker.roles")
+									| {{role}}
 						.looking_fors.vv
-							h4
+							h3
 								| Looking for: &nbsp;
-								span.looking_for(ng-show='hacker.seeking_roles.length') {{hacker.seeking_roles.join(', ')}}
+								span.v
+									label.label.label-danger(ng-show='hacker.seeking_roles.length', ng-repeat="sr in hacker.seeking_roles") 
+										| {{sr}}
+						.skills.v
+							h4
+								| Skill: &nbsp;
+								span.v
+									label.label.label-info.skill(ng-show='hacker.skills.length', ng-repeat="s in hacker.skills") 
+										| {{s}}
 						.interests.vv
 							h4
 								| Seeking skills: &nbsp;
-								span.interests(ng-show='hacker.seeking_skills.length') {{hacker.seeking_skills.join(', ')}}
+								span.v
+									label.label.label-warning(ng-show='hacker.seeking_skills.length', ng-repeat="ss in hacker.seeking_skills") 
+										| {{ss}}
 						//div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
-						div(ng-if='hacker.location' ui-map-marker="hacker.marker")
+						//div(ng-if='hacker.location' ui-map-marker="hacker.marker")
+						.events
+							.event(ng-repeat="e in hacker.events")
+								| {{e.title}}
 						.idea {{hacker.ideas[0]}}
 						.match
 							.match_score 

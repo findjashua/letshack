@@ -17,6 +17,9 @@ a:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+.art {
+  text-align: right;
+}
 .pd {
   padding-top: 2em;
 }

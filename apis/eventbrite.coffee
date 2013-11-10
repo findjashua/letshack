@@ -1,5 +1,5 @@
 request = require 'request'
-development = process.env.APP_ENV='development'
+development = process.env.APP_ENV=='development'
 
 BASE_URL = 'https://www.eventbrite.com/json'
 APP_KEY = if development then 'TQ5TRFYAZSDUVIHID6' else 'RWMYVZPMC36BPJXMV2'

@@ -21,11 +21,14 @@ html(ng-app='hackerApp')
     nav.navbar.navbar-default(role='navigation')
         .container
             .navbar-header
-                a.navbar-brand(href='/') Hacker Trackr
+                a.navbar-brand(href='/') 
+                    img(src="/images/logo_mini.png")
+                    | &nbsp;Hacker Trackr
             ul.nav.navbar-nav.navbar-right
                 if (user_session)
                     li
                         a(href='#')
+                            | Logged in as 
                             if user_session.pictureUrl
                                 img(style="width:30px;height:30px" src=user_session.pictureUrl)
                             | &nbsp;#{user_session.name}
