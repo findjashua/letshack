@@ -70,7 +70,7 @@ block content
 							.select_container 
 								span Select Roles:
 								ul.select_inner.list-unstyled
-									li(ng-repeat="rl in rolelist")
+									li(ng-repeat="rl in rolelist", ng-class="{sel: rl.checked}")
 										input(type="checkbox" ng-model="rl.checked")
 										label &nbsp;{{rl.name}}
 									li
@@ -83,7 +83,7 @@ block content
 							.select_container
 								span Select Skills:
 								ul.select_inner.list-unstyled
-									li(ng-repeat="s in skillslist")
+									li(ng-repeat="s in skillslist", ng-class="{sel: s.checked}")
 										input(type='checkbox' ng-model="s.checked")
 										label &nbsp;{{s.name}}
 									li
@@ -96,7 +96,7 @@ block content
 							.select_container
 								span Select Industries:
 								ul.select_inner.list-unstyled
-									li(ng-repeat="i in interestlist")
+									li(ng-repeat="i in interestlist", ng-class="{sel: i.checked}")
 										input(type='checkbox' ng-model="i.checked")
 										label &nbsp;{{i.name}}
 									li
