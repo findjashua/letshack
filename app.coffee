@@ -160,14 +160,16 @@ app.get "/eventbrite/logout", (req, res) ->
 ##############User#################
 
 user = require './models/user'
-app.get '/user', user.list
-app.post '/user', user.create
-app.get '/user/:authId', user.find
-app.put '/user', user.update
-#app.get '/getEvents', user.getEvents
-###
-app.delete '/user/:name', user.delete
-###
+app.get '/user', ensureAuthenticated, user.list
+app.post '/user', ensureAuthenticated, user.create
+app.get '/user/:authId', ensureAuthenticated, user.find
+app.put '/user', ensureAuthenticated, user.update
+app.get '/matches', ensureAuthenticated, user.matches
+#app.delete '/user/:name', user.delete
+
+event = require './models/event'
+app.get 'attendees/:eventId', event.getAttendees
+
 
 http = require("http")
 http.createServer(app).listen 3000

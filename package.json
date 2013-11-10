@@ -16,6 +16,7 @@
     "jade": "latest",
     "stylus": "latest",
     "coffee-script": "latest",
+    "underscore": "latest",
     "mongoose": "latest",
     "passport": "latest",
     "passport-linkedin-oauth2": "latest",
