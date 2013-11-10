@@ -80,7 +80,7 @@ app.get "/linkedin/auth", passport.authenticate("linkedin",
 app.get "/linkedin/auth/callback", passport.authenticate("linkedin",
   failureRedirect: "/linkedin/login"
 ), (req, res) ->
-  res.redirect "/linkedin/account"
+  res.redirect "/"
 
 app.get "/linkedin/logout", (req, res) ->
   req.logout()
