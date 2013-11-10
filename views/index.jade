@@ -1,6 +1,7 @@
 extends layout
 
 block content
+<<<<<<< HEAD
 	.pure-g
 		.pure-u-3-3(ng-controller='setProfileCtrl')
 
@@ -56,3 +57,7 @@ block content
 						em {{msg.from}}:
 						p {{msg.msg}}
 				input(type='text', ng-model='msg', ng-keydown='addMessage($event)' placeholder='Say something here!')
+=======
+  h1= title
+  p Welcome to #{title}
+>>>>>>> init

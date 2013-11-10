@@ -10,5 +10,17 @@
   },
   "scripts": {
     "start": "coffee app.coffee"
+  },
+  "dependencies": {
+    "express": "latest",
+    "jade": "latest",
+    "stylus": "latest",
+    "coffee-script": "latest",
+    "passport": "latest",
+    "passport-linkedin-oauth2": "latest",
+    "mongoose": "latest",
+    "request": "latest",
+    "querystring": "latest",
+    "emailjs": "latest"
   }
 }
