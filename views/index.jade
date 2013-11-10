@@ -9,7 +9,7 @@ block content
 			.col-xs-12(ng-cloak=true)
 				.jumbotron
 					h1 Hackr Trackr
-					p Helping Hackers become Founders
+					p Helping Hackers become Founders 
 					p.art
 						a.btn.btn-lg.btn-danger(href="/eventbrite/auth") Login with EventBrite
 		.row(ng-show="session_data")
@@ -79,10 +79,16 @@ block content
 								label.label.label-warning(ng-repeat="ss in you.seeking_skills")
 									| {{ss}}
 						h4 interested in {{you.industries.join(', ')}}		
-						p {{you.ideas[0]}}
-				#search.1-box
-					.v
-						input.form_control(ng-model="search.idea",placeholder="Search by idea")
+						p.idea {{you.ideas[0]}}
+						#your_events
+							h5 Events
+							.event(ng-repeat="e in you.events")
+								| {{e.title}}
+
+				#search.v
+					span
+						input.form-control.input-lg(type='text',ng-model="search.idea",placeholder="Search by idea")
+					a.btn.btn-primary.btn-small(ng-click="search=null", ng-show="search!=null") Clear
 					#filter_row
 						.v
 							span.em Filter by Roles:
@@ -120,18 +126,17 @@ block content
 										a(ng-click="setAll('interestlist',true)") select all
 									li
 										a(ng-click="setAll('interestlist',false)") deselect all
-					.v
-						.v
-							#sortby_selection.v
-								label Sort by: 
-								select(ng-model="orderToken", ng-change="updateOrderType()")
-									option(value="you_want_them") Best candidates
-									option(value="they_want_you") Most desired by
-									option(value="match_score") Best match
 
 			.col-xs-9(ng-show="isComplete && hackers_loaded")
-				h3.art
-					{{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
+				h3.art.v
+					#sortby_selection.v
+						span Sort by: 
+						select(ng-model="orderToken", ng-change="updateOrderType()")
+							option(value="you_want_them") Best candidates
+							option(value="they_want_you") Most desired by
+							option(value="match_score") Best match
+					span
+						|  &nbsp; {{(hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search).length}} hackers found
 				#hackers(ng-if="hackers.length")
 					.hacker(ng-repeat="hacker in hackers | filterByRole:rolelist | filterByInterest:interestlist | filterBySkills:skillslist | filter:search | orderBy:[orderType] | limitTo: 20", ng-animate="'hacker'")
 						h2
@@ -160,9 +165,10 @@ block content
 						//div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
 						//div(ng-if='hacker.location' ui-map-marker="hacker.marker")
 						.events
+							h5 Events
 							.event(ng-repeat="e in hacker.events")
 								| {{e.title}}
-						.idea {{hacker.ideas[0]}}
+						.idea(ng-if="hacker.ideas[0] && hacker.ideas[0].length") {{hacker.ideas[0]}}
 						.match
 							.match_score 
 								span.smaller Best Match 

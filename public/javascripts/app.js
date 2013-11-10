@@ -208,16 +208,16 @@
       };
       $scope.rolelist = [
         {
-          name: 'frontend',
+          name: 'backend',
           checked: true
         }, {
-          name: 'backend',
+          name: 'business',
           checked: true
         }, {
           name: 'designer',
           checked: true
         }, {
-          name: 'business',
+          name: 'frontend',
           checked: true
         }, {
           name: 'mobile',
@@ -226,6 +226,12 @@
       ];
       $scope.interestlist = [
         {
+          name: 'advertising',
+          checked: true
+        }, {
+          name: 'games',
+          checked: true
+        }, {
           name: 'healthcare',
           checked: true
         }, {
@@ -233,9 +239,6 @@
           checked: true
         }, {
           name: 'social network',
-          checked: true
-        }, {
-          name: 'advertising',
           checked: true
         }, {
           name: 'wearables',
@@ -247,25 +250,28 @@
       ];
       $scope.skillslist = [
         {
+          name: 'android',
+          checked: true
+        }, {
           name: 'javascript',
           checked: true
         }, {
-          name: 'ruby',
-          checked: true
-        }, {
-          name: 'nodejs',
-          checked: true
-        }, {
-          name: 'python',
+          name: 'haskell',
           checked: true
         }, {
           name: 'ios',
           checked: true
         }, {
-          name: 'android',
+          name: 'nodejs',
           checked: true
         }, {
           name: 'pitching',
+          checked: true
+        }, {
+          name: 'python',
+          checked: true
+        }, {
+          name: 'ruby',
           checked: true
         }, {
           name: 'ruby on rails',

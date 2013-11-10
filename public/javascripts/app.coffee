@@ -110,30 +110,32 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 						$scope.initHackers hackers
 
 	$scope.rolelist = [
-		{name: 'frontend', checked:true}
 		{name:'backend', checked: true} 
-		{name:'designer', checked: true}
 		{name:'business', checked: true}
+		{name:'designer', checked: true}
+		{name: 'frontend', checked:true}
 		{name:'mobile', checked: true}
 	]
 
 	$scope.interestlist = [
+		{name: 'advertising', checked: true}
+		{name: 'games', checked: true}
 		{name: 'healthcare', checked: true}
 		{name: 'social media', checked: true}
 		{name: 'social network', checked: true}
-		{name: 'advertising', checked: true}
 		{name: 'wearables', checked: true}
 		{name: 'google glasses', checked: true}
 	]
 
 	$scope.skillslist = [
-		{name: 'javascript', checked: true}
-		{name: 'ruby', checked: true}
-		{name: 'nodejs', checked: true}
-		{name: 'python', checked: true}
-		{name: 'ios', checked: true}
 		{name: 'android', checked: true}
+		{name: 'javascript', checked: true}
+		{name: 'haskell', checked: true}
+		{name: 'ios', checked: true}
+		{name: 'nodejs', checked: true}
 		{name: 'pitching', checked: true}
+		{name: 'python', checked: true}
+		{name: 'ruby', checked: true}
 		{name: 'ruby on rails', checked: true}
 	]
 

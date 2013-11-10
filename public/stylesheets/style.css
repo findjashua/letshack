@@ -6,6 +6,10 @@ body {
   background-color: #fff;
   font: 12px Helvetica, Arial, sans-serif;
 }
+.idea {
+  padding: 5px;
+  background-color: #eee;
+}
 input[type=checkbox] {
   margin: 0;
   padding: 0;
@@ -52,10 +56,6 @@ span.em {
 .hacker .match > * {
   width: 300px;
   text-align: right;
-}
-.hacker .idea {
-  padding: 5px;
-  background-color: #eee;
 }
 .v > * {
   display: inline-block;
