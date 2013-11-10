@@ -17,8 +17,8 @@ schema = new Schema
 	technologies : [String]
 	industries : [String]
 	ideas : [String]
-	seekingRoles : [String]
-	seekingSkills : [String]
+	seeking_roles : [String]
+	seeking_skills : [String]
 	pings : 
 		unresponded : [Schema.Types.Objectid]
 		accepted : [Schema.Types.Objectid]
@@ -59,10 +59,16 @@ exports.create = (req, res)->
 		return res.send data
 
 exports.find = (req, res)->
-	condition = req.query
-	User.find condition, (err, data)->
+	User.find req.query, (err, data)->
 		return res.send err if err?
 		return res.send data
+
+exports.update = (req, res)->
+	if not req.user?
+		res.redirect "/linkedin/login"
+	User.update {"_id" : "#{req.session.id}"}, req.body, (err, data)->
+		return res.send err if err?
+		return res.send data 
 
 
 

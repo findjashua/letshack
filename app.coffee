@@ -115,8 +115,8 @@ user = require './models/user'
 app.get '/user', user.list
 app.post '/user', user.create
 app.get '/user/:name', user.find
+app.put '/user', user.update
 ###
-app.put '/user/:name', user.update
 app.delete '/user/:name', user.delete
 ###
 
