@@ -1,4 +1,5 @@
 mongoose = require 'mongoose'
+eventbrite = require '../apis/eventbrite'
 
 url = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/letshack'
 db = mongoose.createConnection url
@@ -68,6 +69,14 @@ exports.update = (req, res)->
 		return res.send err if err?
 		req.session.complete = true
 		return res.send 200
+
+exports.getEvents = (req, res)->
+	if not req.user?
+		res.redirect "/linkedin/login"
+	eventbrite.getEvents req.session.accessToken, (err, data)->
+		return res.send err if err?
+		return res.send data
+
 
 
 
