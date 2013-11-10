@@ -49,7 +49,8 @@ app.controller 'loginCtrl', ['$scope', ($scope)->
 
 app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window, $http)->
 
-	$scope.isComplete = $window.session_data.complete
+	$scope.session_data = $window.session_data
+	$scope.isComplete = $window.session_data && $window.session_data.complete
 
 	$scope.new_user_profile =
 		roles: {}

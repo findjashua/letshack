@@ -98,7 +98,8 @@
     '$scope', '$window', '$http', function($scope, $window, $http) {
       var ajax, hackers;
 
-      $scope.isComplete = $window.session_data.complete;
+      $scope.session_data = $window.session_data;
+      $scope.isComplete = $window.session_data && $window.session_data.complete;
       $scope.new_user_profile = {
         roles: {},
         industries: {},

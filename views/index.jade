@@ -4,10 +4,11 @@ block extra_header
 	script(type='text/javascript').
 		window.session_data = !{JSON.stringify(user_session)};
 block content
-	.container
-		.row
+	.container(ng-controller="findHackerCtrl", ng-cloak=true)
+		.row(ng-hide="session_data")
 			.col-xs-12(ng-controller="loginCtrl", ng-cloak=true)
-		.row(ng-controller="findHackerCtrl", ng-cloak=true)
+				a.btn.btn-lg.btn-danger(href="/linkedin/auth") Login with LinkedIn
+		.row(ng-show="session_data")
 			#set_profile(ng-hide="isComplete")
 				h2 Complete your profile!
 				#set_profile_inner
