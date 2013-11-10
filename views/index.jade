@@ -46,6 +46,12 @@ block content
 						a.btn.large.btn-lg.btn-primary(ng-click="submit_profile()") Submit Profile
 
 			.col-xs-12(ng-show="isComplete")
+				#your_info(ng-show="you")
+					img(ng-src="{{you.pictureUrl}}")
+					h2 {{you.name}} ({{you.roles.join(', ')}})
+					h3 looking for {{you.seeking_roles.join(', ')}}
+					h4 interested in {{you.industries.join(', ')}}		
+
 				#search.1-box
 					.v
 						label name

@@ -46,7 +46,6 @@ app.controller 'messageCtrl', ['$scope', 'angularFire', '$timeout','$http', ($sc
 app.controller 'loginCtrl', ['$scope', ($scope)->
 ]
 
-
 app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window, $http)->
 
 	$scope.session_data = $window.session_data
@@ -84,6 +83,9 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		ajax "/user", {method: 'put', data: transformed_user_profile_data}, (data)->
 			$scope.session_data.complete = true
 			$scope.isComplete = true
+			$scope.profile_data = transformed_user_profile_data
+			$scope.fetch_user $scope.session_data.authId, (data)->
+				$scope.you = data
 
 	$scope.rolelist = [
 		{name: 'frontend', checked:true}
@@ -113,6 +115,13 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 
 	$scope.reverseMatch= true
 	$scope.hackers = []
+
+	$scope.users_data = {}
+
+	$scope.fetch_user = (authId, cb)->
+		ajax "/user/#{authId}", {}, (data)->
+			$scope.users_data[authId.toString()] = data
+			cb(data)
 
 	$scope.setAllInterest = (param)->
 		for i in $scope.interestlist
@@ -167,9 +176,9 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 		{
 			id: 2
 			name: 'Eve'
-			roles: ['hustler']
+			roles: ['business']
 			skillsets:
-				hustler: ['excel']
+				business: ['excel']
 			interests: ['wearables']
 			looking_for: ['frontend', 'backend', 'designer']
 			idea: "I want to build a dog food startup"
@@ -181,7 +190,7 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			roles: ['mobile']
 			skillsets:
 				mobile: ['ios', 'android']
-			layout: ['google glasses']
+			interests: ['google glasses']
 			looking_for: ['backend']
 			idea: "I want to build a medical startup as well"
 			location:
@@ -204,6 +213,12 @@ app.controller 'findHackerCtrl', ['$scope', '$window','$http', ($scope, $window,
 			match: 100
 		}
 	]
+
+	if $scope.isComplete
+		$scope.fetch_user $window.session_data.authId, (data)->
+			$scope.you = data
+
+
 	window.onGoogleReady = ->
 		window.geocoder = new google.maps.Geocoder()
 		$scope.$apply ->

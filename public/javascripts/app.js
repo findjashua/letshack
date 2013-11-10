@@ -155,7 +155,11 @@
           data: transformed_user_profile_data
         }, function(data) {
           $scope.session_data.complete = true;
-          return $scope.isComplete = true;
+          $scope.isComplete = true;
+          $scope.profile_data = transformed_user_profile_data;
+          return $scope.fetch_user($scope.session_data.authId, function(data) {
+            return $scope.you = data;
+          });
         });
       };
       $scope.rolelist = [
@@ -220,6 +224,13 @@
       ];
       $scope.reverseMatch = true;
       $scope.hackers = [];
+      $scope.users_data = {};
+      $scope.fetch_user = function(authId, cb) {
+        return ajax("/user/" + authId, {}, function(data) {
+          $scope.users_data[authId.toString()] = data;
+          return cb(data);
+        });
+      };
       $scope.setAllInterest = function(param) {
         var i, _i, _len, _ref, _results;
 
@@ -305,9 +316,9 @@
         }, {
           id: 2,
           name: 'Eve',
-          roles: ['hustler'],
+          roles: ['business'],
           skillsets: {
-            hustler: ['excel']
+            business: ['excel']
           },
           interests: ['wearables'],
           looking_for: ['frontend', 'backend', 'designer'],
@@ -320,7 +331,7 @@
           skillsets: {
             mobile: ['ios', 'android']
           },
-          layout: ['google glasses'],
+          interests: ['google glasses'],
           looking_for: ['backend'],
           idea: "I want to build a medical startup as well",
           location: {
@@ -345,6 +356,11 @@
           match: 100
         }
       ];
+      if ($scope.isComplete) {
+        $scope.fetch_user($window.session_data.authId, function(data) {
+          return $scope.you = data;
+        });
+      }
       return window.onGoogleReady = function() {
         window.geocoder = new google.maps.Geocoder();
         return $scope.$apply(function() {
