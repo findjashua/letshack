@@ -1,44 +1,27 @@
-ensureAuthenticated = (req, res, next) ->
-  return next()  if req.isAuthenticated()
-  res.redirect "/login"
-  
 express = require("express")
 passport = require("passport")
-linkedin = require("passport-linkedin-oauth2")
 routes = require("./routes")
-user = require("./routes/user")
 http = require("http")
 path = require("path")
 stylus = require('stylus')
 
-LinkedinStrategy = linkedin.Strategy
-LINKEDIN_CLIENT_ID = "75agqd2lrg9ozy"
-LINKEDIN_CLIENT_SECRET = "0c1wXQ6vuAfoTN9Z"
-passport.serializeUser (user, done) ->
-  done null, user
+RedisStore = require("connect-redis")(express)
+redisStore = new RedisStore
+  host: "http://localhost"
+  port: 6379
+  prefix: "sess"
 
-passport.deserializeUser (obj, done) ->
-  done null, obj
-
-passport.use new LinkedinStrategy(
-  clientID: LINKEDIN_CLIENT_ID
-  clientSecret: LINKEDIN_CLIENT_SECRET
-  callbackURL: "http://localhost:3000/linkedin/auth/callback"
-  #scope: ["r_basicprofile", "r_emailaddress"]
-  passReqToCallback: true
-, (req, accessToken, refreshToken, profile, done) ->
-  req.session.accessToken = accessToken
-  done null, profile
-)
 app = express()
-
 app.set "views", __dirname + "/views"
 app.set "view engine", "jade"
 app.use express.logger()
 app.use express.cookieParser()
 app.use express.urlencoded()
 app.use express.json()
-app.use express.session(secret: "keyboard cat")
+app.use express.session(
+  #store: redisStore
+  secret: "keyboard cat"
+)
 app.use passport.initialize()
 app.use passport.session()
 app.use express.bodyParser()
@@ -52,6 +35,34 @@ app.use express.static(__dirname + "/public")
 
 app.get "/", (req, res)->
   res.render('index', { title: 'Express' })
+
+###############LinkedIn#################
+
+linkedin = require("passport-linkedin-oauth2")
+LinkedinStrategy = linkedin.Strategy
+LINKEDIN_CLIENT_ID = "75agqd2lrg9ozy"
+LINKEDIN_CLIENT_SECRET = "0c1wXQ6vuAfoTN9Z"
+
+passport.serializeUser (user, done) ->
+  done null, user
+
+passport.deserializeUser (obj, done) ->
+  done null, obj
+
+passport.use new LinkedinStrategy(
+  clientID: LINKEDIN_CLIENT_ID
+  clientSecret: LINKEDIN_CLIENT_SECRET
+  callbackURL: "http://localhost:3000/linkedin/auth/callback"
+  passReqToCallback: true
+, (req, accessToken, refreshToken, profile, done) ->
+  req.session.accessToken = accessToken
+  require("./models/user").upsert 'linkedin', accessToken, profile
+  done null, profile
+)
+
+ensureAuthenticated = (req, res, next) ->
+  return next()  if req.isAuthenticated()
+  res.redirect "/linkedin/login"
 
 app.get "/linkedin/login", (req, res) ->
   user = req.user
@@ -74,6 +85,19 @@ app.get "/linkedin/auth/callback", passport.authenticate("linkedin",
 app.get "/linkedin/logout", (req, res) ->
   req.logout()
   res.redirect "/linkedin/login"
+
+
+##############User#################
+
+user = require './models/user'
+app.get '/user', user.list
+app.post '/user', user.create
+app.get '/user/:name', user.find
+###
+app.put '/user/:name', user.update
+app.delete '/user/:name', user.delete
+###
+
 
 http = require("http")
 http.createServer(app).listen 3000
