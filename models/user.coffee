@@ -9,8 +9,8 @@ Schema = mongoose.Schema
 eventSchema = new Schema
 	id : {type : Number}
 	title : {type : String}
-	start_date : {type : Date}
-	end_date : {type : Date}
+	start_date : {type : String}
+	end_date : {type : String}
 
 userSchema = new Schema
 	name : {type : String}

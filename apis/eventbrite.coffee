@@ -16,8 +16,8 @@ exports.getEvents = (accessToken, callback)->
 			data.push 
 				id : event.id
 				title : event.title
-				start_date : new Date event.start_date
-				end_date : new Date event.end_date
+				start_date : event.start_date
+				end_date : event.end_date
 			console.log data
 		callback null, data
 
