@@ -35,7 +35,11 @@ a:hover {
   top: 0;
   right: 0;
   padding: 5px;
-  font-size: 2em;
+  font-size: 1.5em;
+}
+.hacker .match > * {
+  width: 300px;
+  text-align: right;
 }
 .hacker .idea {
   padding: 5px;

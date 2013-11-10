@@ -129,10 +129,17 @@ block content
 						//div(ui-map="hacker.googlemap" ui-event="{'map-idle' : 'hacker.onMapIdle()'}" ui-options="hacker.mapOptions" class="map-canvas" ng-if='hacker.location')
 						div(ng-if='hacker.location' ui-map-marker="hacker.marker")
 						.idea {{hacker.ideas[0]}}
-						.match.v
-							.you_want_them {{hacker.scores.you_want_them | number:1}}%&nbsp;
-							.they_want_you {{hacker.scores.they_want_you | number:1}}%&nbsp;
-							.match_score {{hacker.scores.match_score | number:1}}%
+						.match
+							.match_score 
+								span.smaller Best Match 
+								| {{hacker.scores.match_score | number:1}}%
+							.you_want_them 
+								span.smaller You benefit them 
+								| {{hacker.scores.you_want_them | number:1}}%
+							.they_want_you 
+								span.smaller They benefit you 
+								| {{hacker.scores.they_want_you | number:1}}%
+							
 				#no_hackers(ng-if="!hackers.length")
 					| No hackers found!
 			.col-xs-3(ng-controller="messageCtrl", ng-show="false && isComplete")
