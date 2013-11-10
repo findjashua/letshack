@@ -118,7 +118,7 @@ app.get "/linkedin/logout", (req, res) ->
 ###
 #############Eventbrite############
 
-eventbrite= require 'passport-eventbrite-oauth'
+eventbrite = require 'passport-eventbrite-oauth'
 EventbriteStrategy = eventbrite.OAuth2Strategy
 
 EVENTBRITE_CLIENT_ID = if development then 'TQ5TRFYAZSDUVIHID6' else 'RWMYVZPMC36BPJXMV2'
